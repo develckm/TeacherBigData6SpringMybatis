@@ -27,5 +27,15 @@
             </tr>
         </tbody>
     </table>
+    <p th:text="${paging}"></p>
+    <nav>
+        <ul>
+            <li th:each=" i : ${#numbers.sequence(paging.startPage,paging.endPage)}">
+                <a th:href="@{''(page=${i},rows=${param.rows})}" th:text="${i}"></a>
+            </li>
+
+        </ul>
+
+    </nav>
 </body>
 </html>

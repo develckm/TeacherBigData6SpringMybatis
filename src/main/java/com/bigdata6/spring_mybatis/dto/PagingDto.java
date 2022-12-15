@@ -1,14 +1,17 @@
 package com.bigdata6.spring_mybatis.dto;
 
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.Map;
 
 @Data
 public class PagingDto {
     private int page=1;
+
     private int rows=10;
     private int startRow;
+
     private String orderField;
     private String direct="DESC";
     private int totalRows; //레코드 전체 수
@@ -22,12 +25,14 @@ public class PagingDto {
     private int endPage;
     private String queryString;
 
+    public PagingDto() { //dto를 컨트롤러의 파라터로 사용할때 생성에 정의된 필드가 required=true 로 정의된다.
+    }
+
     public PagingDto(int page, int rows, String orderField, String direct) {
         this.page = page;
         this.rows = rows;
         this.orderField = orderField;
         this.direct = direct;
-        this.startRow=(page-1)*rows;
     }
 
     public void setQueryString(Map<String, String[]> queryMap) {
@@ -45,6 +50,7 @@ public class PagingDto {
     }
 
     public void setTotalRows(int totalRows) {
+        this.startRow=(this.page-1)*this.rows;
         this.totalRows = totalRows;
         this.totalPages=totalRows/rows+((totalRows%rows>0)?1:0);
         this.startPage=this.page-(pageCount-1)/2;

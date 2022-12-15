@@ -8,9 +8,22 @@
     <select id="findAll" resultType="com.bigdata6.spring_mybatis.dto.UserDto">
         SELECT * FROM USER
     </select>
+    <!-- #{ 필드명 }  : 필드의 값을 value 대입  user_id=#{id} => user_id='user1'  -->
+    <!-- ${ 필드명 }  : 필드의 값을 예약어나 필드명으로 대입  ORDER BY ${order} => ORDER BY user_id  -->
+    <!-- List<UserDto> findPaging(pagingDto) -->
     <select id="findPaging"
             resultType="com.bigdata6.spring_mybatis.dto.UserDto"
             parameterType="com.bigdata6.spring_mybatis.dto.PagingDto">
-        SELECT * FROM USER ORDER BY #{orderField} #{direct} LIMIT #{startRow},#{rows}
+        SELECT * FROM USER
+            <if test="orderField!=null">
+                ORDER BY ${orderField} ${direct}
+            </if>
+            LIMIT #{startRow},#{rows}
+    </select>
+    <!--int count(PagingDto paging);-->
+    <select id="count"
+            resultType="int"
+            parameterType="com.bigdata6.spring_mybatis.dto.PagingDto">
+        SELECT COUNT(*) FROM USER
     </select>
 </mapper>

@@ -48,6 +48,8 @@ public class UserServiceImp  implements  UserService{
 
     @Override
     public List<UserDto> list(PagingDto paging) {
+        int totalRows=userMapper.count(paging);
+        paging.setTotalRows(totalRows); //startRow 를 정의
         List<UserDto> list=userMapper.findPaging(paging);
         return list;
     }
