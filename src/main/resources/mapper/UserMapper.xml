@@ -11,5 +11,6 @@
     <select id="findPaging"
             resultType="com.bigdata6.spring_mybatis.dto.UserDto"
             parameterType="com.bigdata6.spring_mybatis.dto.PagingDto">
+        SELECT * FROM USER ORDER BY #{orderField} #{direct} LIMIT #{startRow},#{rows}
     </select>
 </mapper>

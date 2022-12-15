@@ -48,7 +48,8 @@ public class UserServiceImp  implements  UserService{
 
     @Override
     public List<UserDto> list(PagingDto paging) {
-        return null;
+        List<UserDto> list=userMapper.findPaging(paging);
+        return list;
     }
 
     @Override
