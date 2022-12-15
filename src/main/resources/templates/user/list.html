@@ -7,5 +7,25 @@
 <body>
     <th:block th:insert="/headerNav"></th:block>
     <h1>유저 리스트</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>아이디</th>
+                <th>이름</th>
+                <th>생일</th>
+                <th>폰번호</th>
+                <th>가입일</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="user:${userList}">
+                <td th:text="${user.user_id}"></td>
+                <td th:text="${user.name}"></td>
+                <td th:text="${user.birth}"></td>
+                <td th:text="${user.phone}"></td>
+                <td th:text="${user.signup}"></td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>

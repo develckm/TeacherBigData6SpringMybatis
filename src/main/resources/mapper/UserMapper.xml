@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- sessionFactory 가 작성한 sql Mapper 를 해당 타입으로 객체를 생성한다.-->
+<mapper namespace="com.bigdata6.spring_mybatis.mapper.UserMapper">
+    <!-- id: 해당 타입의 method 이름  -->
+    <select id="findAll" resultType="com.bigdata6.spring_mybatis.dto.UserDto">
+        SELECT * FROM USER
+    </select>
+    <select id="findPaging"
+            resultType="com.bigdata6.spring_mybatis.dto.UserDto"
+            parameterType="com.bigdata6.spring_mybatis.dto.PagingDto">
+    </select>
+</mapper>
