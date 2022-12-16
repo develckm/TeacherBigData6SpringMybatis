@@ -1,11 +1,13 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
 <head>
     <meta charset="UTF-8">
     <title>SPRING_BOOT Mybatis</title>
 </head>
-<body>
-    <th:block th:include="headerNav"></th:block>
+<div layout:fragment="content">
     <h1>SPRING_MYBATIS 로 DB 접속을 관리하자!</h1>
-</body>
+</div>
 </html>

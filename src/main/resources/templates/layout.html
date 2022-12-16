@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/uikit/css/uikit.css">
+  <script src="/uikit/js/uikit.js"></script>
+  <script src="/uikit/js/uikit-icons.js"></script>
+</head>
+<body>
+  <header>
+    <th:block th:replace="/headerNav"></th:block>
+  </header>
+  <main>
+    <th:block layout:fragment="contents"></th:block>
+  </main>
+</body>
+</html>

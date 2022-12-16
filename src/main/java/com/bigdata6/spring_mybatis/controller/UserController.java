@@ -4,6 +4,7 @@ import com.bigdata6.spring_mybatis.dto.PagingDto;
 import com.bigdata6.spring_mybatis.dto.UserDto;
 import com.bigdata6.spring_mybatis.mapper.UserMapper;
 import com.bigdata6.spring_mybatis.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,16 +26,10 @@ public class UserController {
     }
 
     @GetMapping("list.do")
-    public String list(
-                       //@RequestParam(defaultValue = "1") int page,
-                       //@RequestParam(defaultValue = "10")int rows,
-                       //@RequestParam(defaultValue = "user_id")String orderField,
-                       //@RequestParam(defaultValue = "DESC")String direct,
-                       PagingDto paging,
-                       Model model){//void,model.addAttribute Type return "/user/list.html";
-        //System.out.println(page+","+rows);
-        //PagingDto pagingDto=new PagingDto(page,rows,orderField,direct);
-        //if(paging.getOrderField()==null)paging.setOrderField("user_id"); //다이나믹 쿼리로 처리
+    public String list(PagingDto paging,
+                       Model model,
+                       HttpServletRequest req){
+        paging.setQueryString(req.getParameterMap());
         System.out.println(paging);
         List<UserDto> userDtoList=userService.list(paging);
         model.addAttribute("userList",userDtoList);
