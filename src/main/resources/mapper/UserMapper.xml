@@ -26,4 +26,34 @@
             parameterType="com.bigdata6.spring_mybatis.dto.PagingDto">
         SELECT COUNT(*) FROM USER
     </select>
+    <!--  CRUD.T findById(P id) => UserDto findById(String id) -->
+    <select id="findById" resultType="UserDto" parameterType="String">
+        SELECT * FROM USER WHERE user_id=#{id}
+    </select>
+    <!-- int updateById(UserDto dto); -->
+    <update id="updateById" parameterType="UserDto">
+        UPDATE USER SET
+            name=#{name},
+            pw=#{pw},
+            phone=#{phone},
+            email=#{email},
+            birth=#{birth},
+            signup=#{signup}
+            WHERE user_id=#{user_id}
+    </update>
+    <!-- int insert(UserDto dto);   -->
+    <insert id="insert" parameterType="UserDto">
+        INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES
+        (#{user_id},#{name},#{pw},#{phone},#{email},#{birth})
+    </insert>
+    <!-- int deleteById(String id);   -->
+    <delete id="deleteById" parameterType="String">
+        DELETE FROM USER WHERE user_id=#{id}
+    </delete>
+    <!-- UserDto findByUserIdAndPw(String userId,String pw);   -->
+    <select id="findByUserIdAndPw" resultType="UserDto">
+        SELECT * FROM USER WHERE user_id=#{userId} AND pw=#{pw}
+    </select>
+
+
 </mapper>

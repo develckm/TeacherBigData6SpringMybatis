@@ -28,7 +28,7 @@ public class UserServiceImp  implements  UserService{
 
     @Override
     public int register(UserDto user) {
-        return 0;
+        return userMapper.insert(user);
     }
 
     @Override
@@ -38,7 +38,9 @@ public class UserServiceImp  implements  UserService{
 
     @Override
     public int adminModify(UserDto user) {
-        return 0;
+        int modify=0;
+        modify=userMapper.updateById(user);
+        return modify;
     }
 
     @Override
@@ -56,11 +58,17 @@ public class UserServiceImp  implements  UserService{
 
     @Override
     public UserDto detail(String id) {
-        return null;
+        UserDto detail=userMapper.findById(id);
+        return detail;
     }
 
     @Override
     public int idCheck(String id) {
         return 0;
+    }
+
+    @Override
+    public int remove(String id) {
+        return userMapper.deleteById(id);
     }
 }

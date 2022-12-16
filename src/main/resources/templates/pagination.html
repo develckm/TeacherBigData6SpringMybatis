@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+    <nav class="uk-margin uk-flex uk-flex-center">
+        <ul class="uk-pagination">
+            <li th:classappend="${(!paging.prev)?'uk-disabled':''}">
+                <a th:href="@{${paging.queryString}(page=${paging.prevPage})}"><span uk-pagination-previous></span></a></li>
+            <th:block th:if="${paging.startPage>1}">
+                <li>
+                    <a th:href="@{${paging.queryString}(page=1)}">1</a>
+                </li>
+                <li class="uk-disabled"><span>…</span></li>
+            </th:block>
+
+            <li th:each=" i : ${#numbers.sequence(paging.startPage,paging.endPage)}"
+                th:classappend="${(i==paging.page)?'uk-disabled':''}">
+                <a th:classappend="${(i==paging.page)?'uk-text-primary uk-text-bold':''}"
+                   th:href="@{${paging.queryString}(page=${i})}" th:text="${i}"></a>
+            </li>
+            <th:block th:if="${paging.endPage<paging.totalPages}">
+                <li class="uk-disabled"><span>…</span></li>
+                <li>
+                    <a th:href="@{${paging.queryString}(page=${paging.totalPages})}"
+                       th:text="${paging.totalPages}"></a>
+                </li>
+            </th:block>
+
+            <li th:classappend="${(!paging.next)?'uk-disabled':''}">
+                <a th:href="@{${paging.queryString}(page=${paging.nextPage})}"><span uk-pagination-next></span></a></li>
+        </ul>
+    </nav>
+</html>
