@@ -10,15 +10,53 @@
 <div layout:fragment="contents">
     <h1>게시글 리스트</h1>
     <div class="uk-overflow-auto">
-
         <table class="uk-table uk-table-divider uk-table-hover">
             <thead>
-                <tr>
-                    <th>no</th>
-                    <th>제목</th>
-                    <th>글쓴이</th>
-                    <th>게시일</th>
-                    <th>조회수</th>
+                    <th:block th:with="active=${#strings.equals(paging.orderField,'board_no')}">
+                        <th th:with="direct=${( active && #strings.equals(paging.direct,'DESC') || paging.direct==null)?'ASC':'DESC'},
+                                     icon=${( active && #strings.equals(paging.direct,'ASC') )?'arrow-up':'arrow-down'}">
+                            <a th:classappend="${(active)?'':'uk-link-muted'}" th:href="@{''(orderField='board_no',direct=${direct})}">
+                                번호
+                                <span th:attr="uk-icon=${icon}"></span>
+                            </a>
+                        </th>
+                    </th:block>
+                    <th:block th:with="active=${#strings.equals(paging.orderField,'title')}">
+                        <th th:with="direct=${( active && #strings.equals(paging.direct,'DESC') || paging.direct==null)?'ASC':'DESC'},
+                                     icon=${( active && #strings.equals(paging.direct,'ASC') )?'arrow-up':'arrow-down'}">
+                            <a th:classappend="${(active)?'':'uk-link-muted'}" th:href="@{''(orderField='title',direct=${direct})}">
+                                제목
+                                <span th:attr="uk-icon=${icon}"></span>
+                            </a>
+                        </th>
+                    </th:block>
+                    <th:block th:with="active=${#strings.equals(paging.orderField,'user_id')}">
+                        <th th:with="direct=${( active && #strings.equals(paging.direct,'DESC') || paging.direct==null)?'ASC':'DESC'},
+                                     icon=${( active && #strings.equals(paging.direct,'ASC') )?'arrow-up':'arrow-down'}">
+                            <a th:classappend="${(active)?'':'uk-link-muted'}" th:href="@{''(orderField='user_id',direct=${direct})}">
+                                글쓴이
+                                <span th:attr="uk-icon=${icon}"></span>
+                            </a>
+                        </th>
+                    </th:block>
+                    <th:block th:with="active=${#strings.equals(paging.orderField,'post_time')}">
+                        <th th:with="direct=${( active && #strings.equals(paging.direct,'DESC') || paging.direct==null)?'ASC':'DESC'},
+                                     icon=${( active && #strings.equals(paging.direct,'ASC') )?'arrow-up':'arrow-down'}">
+                            <a th:classappend="${(active)?'':'uk-link-muted'}" th:href="@{''(orderField='post_time',direct=${direct})}">
+                                게시일
+                                <span th:attr="uk-icon=${icon}"></span>
+                            </a>
+                        </th>
+                    </th:block>
+                    <th:block th:with="active=${#strings.equals(paging.orderField,'views')}">
+                        <th th:with="direct=${( active && #strings.equals(paging.direct,'DESC') || paging.direct==null)?'ASC':'DESC'},
+                                     icon=${( active && #strings.equals(paging.direct,'ASC') )?'arrow-up':'arrow-down'}">
+                            <a th:classappend="${(active)?'':'uk-link-muted'}" th:href="@{''(orderField='views',direct=${direct})}">
+                                조회수
+                                <span th:attr="uk-icon=${icon}"></span>
+                            </a>
+                        </th>
+                    </th:block>
                 </tr>
             </thead>
             <tbody>
