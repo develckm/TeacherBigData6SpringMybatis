@@ -9,5 +9,4 @@ import java.util.List;
 public interface UserMapper extends CRUD<UserDto,String>{
     List<UserDto> findAll();
     UserDto findByUserIdAndPw(String userId,String pw);
-
 }

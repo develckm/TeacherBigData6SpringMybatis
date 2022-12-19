@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>로그인 폼</title>
+</head>
+<div layout:fragment="contents">
+    <h1>유저 로그인</h1>
+    <div class="uk-grid">
+        <form class="uk-padding uk-width-1-3@l uk-width-1-2@m uk-width-1-1@s" action="/user/login.do" method="post">
+            <div class="uk-margin">
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: user"></span>
+                    <input class="uk-input" type="text" name="user_id" value="develckm">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <div class="uk-inline uk-width-1-1">
+                    <span class="uk-form-icon" uk-icon="icon: lock"></span>
+                    <input class="uk-input" type="text" name="pw" value="1234">
+                </div>
+            </div>
+            <div class="uk-margin">
+                <div class="uk-width uk-button-group">
+                    <a class="uk-width-1-2 uk-button uk-button-default" href="/user/signup.do">회원가입</a>
+                    <button class="uk-width-1-2 uk-button uk-button-primary" type="submit">로그인</button>
+                </div>
+            </div>
+        </form>
+
+    </div>
+</div>
+</html>

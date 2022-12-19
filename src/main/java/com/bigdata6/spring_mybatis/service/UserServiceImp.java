@@ -45,7 +45,7 @@ public class UserServiceImp  implements  UserService{
 
     @Override
     public UserDto login(String id, String pw) {
-        return null;
+        return userMapper.findByUserIdAndPw(id,pw);
     }
 
     @Override

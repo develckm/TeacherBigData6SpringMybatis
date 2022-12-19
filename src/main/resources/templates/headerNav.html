@@ -32,6 +32,23 @@
                         </div>
                     </li>
                 </ul>
+                <div class="uk-navbar-right">
+                    <ul class="uk-navbar-nav">
+                        <th:block th:if="${session.loginUser==null}">
+                            <li><a href="/user/login.do">로그인</a></li>
+                            <li><a href="/user/signup.do">회원가입</a></li>
+                        </th:block>
+                        <th:block th:unless="${session.loginUser==null}">
+                            <li>
+                                <a th:href="@{'/user/detail.do' (user_id=${session.loginUser.user_id})}">
+                                    <span th:text="${session.loginUser.user_id}"></span>
+                                    (<span th:text="${session.loginUser.name}"></span> )
+                                </a>
+                            </li>
+                            <li><a href="/user/logout.do">로그아웃</a></li>
+                        </th:block>
+                    </ul>
+                </div>
             </div>
         </div>
     </nav>

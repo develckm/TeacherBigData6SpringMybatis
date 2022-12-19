@@ -54,6 +54,4 @@
     <select id="findByUserIdAndPw" resultType="UserDto">
         SELECT * FROM USER WHERE user_id=#{userId} AND pw=#{pw}
     </select>
-
-
 </mapper>
