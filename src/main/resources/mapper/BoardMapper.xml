@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.bigdata6.spring_mybatis.mapper.BoardMapper">
+    <!--칼럼명과 필드명이 다를 때, join 할때     -->
+    <resultMap id="boardMap" type="BoardDto" autoMapping="true">
+        <id column="board_no" property="boardNo"/>
+        <result column="post_time" property="postTime"/>
+        <association property="user"
+                     column="user_id"
+                     select="com.bigdata6.spring_mybatis.mapper.UserMapper.findById"
+                     fetchType="lazy"
+                     autoMapping="true"/>
+    </resultMap>
+    <!--    association  select(같이 출력할 쿼리 Id) colum(select 에서 사용할 매개변수)
+            fetchType.eager(Default) : user 를 사용하든 하지 않든 출력하겠다.
+            fetchType.lazy : view(thymeleaf)에서 조인해야지만 요청 가능한 user 필드를 작성해야지 조인함 (toString()도 출력 조건에 해당 )
+     -->
+    <select id="findAll" resultMap="boardMap">
+<!--        SELECT * FROM BOARD INNER JOIN USER USING (user_id)-->
+        SELECT * FROM BOARD
+    </select>
+<!--    <select id="findAll" resultType="BoardDto" >
+        SELECT
+            b.board_no boardNo,
+            b.title,
+            b.contents,
+            b.post_time postTime,
+            b.views,
+            u.user_id 'user.user_id',
+            u.name 'user.name',
+            u.phone 'user.phone',
+            u.email 'user.email',
+            u.birth 'user.birth',
+            u.signup 'user.signup'
+            FROM BOARD b INNER JOIN USER u
+            USING (user_id)
+    </select>-->
+    <update id="updateViews">
+        UPDATE BOARD SET views=views+1 WHERE board_no=#{boardNo}
+    </update>
+</mapper>
