@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{/layout}">
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 리스트</title>
+</head>
+<div layout:fragment="contents">
+    <h1>게시글 리스트</h1>
+    <div class="uk-overflow-auto">
+
+        <table class="uk-table uk-table-divider uk-table-hover">
+            <thead>
+                <tr>
+                    <th>no</th>
+                    <th>제목</th>
+                    <th>글쓴이</th>
+                    <th>게시일</th>
+                    <th>조회수</th>
+                </tr>
+            </thead>
+            <tbody>
+            <tr th:each="board:${boardList}" style="cursor: pointer"
+                    th:onclick="location.href = [[@{'detail.do' (board_no=${board.boardNo})}]]">
+                    <td th:text="${board.boardNo}"></td>
+                    <td th:text="${board.title}"></td>
+                    <td th:text="${board.userId}"></td>
+                    <td th:text="${board.postTime}"></td>
+                    <td th:text="${board.views}"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <th:block th:insert="/pagination"></th:block>
+</div>
+</html>

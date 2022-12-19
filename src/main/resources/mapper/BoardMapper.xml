@@ -7,11 +7,12 @@
     <resultMap id="boardMap" type="BoardDto" autoMapping="true">
         <id column="board_no" property="boardNo"/>
         <result column="post_time" property="postTime"/>
+        <result column="user_id" property="userId"/>
         <association property="user"
                      column="user_id"
                      select="com.bigdata6.spring_mybatis.mapper.UserMapper.findById"
-                     fetchType="lazy"
-                     autoMapping="true"/>
+                     fetchType="lazy"/>
+<!--    <collection property="replyList" column="board_no"/> -->
     </resultMap>
     <!--    association  select(같이 출력할 쿼리 Id) colum(select 에서 사용할 매개변수)
             fetchType.eager(Default) : user 를 사용하든 하지 않든 출력하겠다.
@@ -21,6 +22,17 @@
 <!--        SELECT * FROM BOARD INNER JOIN USER USING (user_id)-->
         SELECT * FROM BOARD
     </select>
+    <select id="findPaging" resultMap="boardMap" parameterType="PagingDto">
+        SELECT * FROM BOARD  ORDER BY ${orderField} ${direct} LIMIT #{startRow},#{rows}
+    </select>
+    <select id="count" resultType="int" parameterType="PagingDto">
+        SELECT COUNT(*) FROM BOARD
+    </select>
+    <select id="findById" resultMap="boardMap" parameterType="Integer">
+        SELECT * FROM BOARD WHERE board_no=#{id}
+    </select>
+
+
 <!--    <select id="findAll" resultType="BoardDto" >
         SELECT
             b.board_no boardNo,

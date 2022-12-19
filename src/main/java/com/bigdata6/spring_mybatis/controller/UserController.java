@@ -7,6 +7,8 @@ import com.bigdata6.spring_mybatis.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,7 +23,7 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
     private UserService userService;
-
+    private Logger log= LoggerFactory.getLogger(this.getClass().getSimpleName());
     public UserController(UserService userService) {
         this.userService = userService;
     }
@@ -32,7 +34,7 @@ public class UserController {
                        HttpServletRequest req){
         paging.setQueryString(req.getParameterMap());
         List<UserDto> userDtoList=userService.list(paging);
-        System.out.println(paging);
+        log.info(paging.toString());
         model.addAttribute("userList",userDtoList);
         model.addAttribute("paging",paging);
         return "/user/list";
