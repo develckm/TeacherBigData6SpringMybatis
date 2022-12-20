@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:each="reply : ${replyList}">
+    <div class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
+        <div class="uk-card-header">
+            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                <div th:if="${reply.getImgPath!=null}" class="uk-width-auto">
+                    <img class="uk-border-circle" width="40" height="40"
+                         th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
+                </div>
+                <div class="uk-width-expand">
+                    <h3 class="uk-card-title uk-margin-remove-bottom" th:text="${reply.title}"></h3>
+                    <p class="uk-text-meta uk-margin-remove">
+                        <time datetime="" th:text="${#calendars.format(reply.postTime)}"></time>
+                    </p>
+                    <p class="uk-text-meta uk-margin-remove">
+                        <span th:text="${reply.userId}"></span>
+                        <span></span>
+                        <span></span>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="uk-card-body">
+            <p th:text="${reply.contents}"></p>
+        </div>
+        <div th:if="${session.loginUser!=null && #strings.equals(session.loginUser.user_id,reply.userId)}"
+             class="uk-card-footer">
+            <ul class="uk-breadcrumb">
+                <li>
+                    <a href="#" class="uk-button uk-button-text uk-text-primary">수정</a>
+                </li>
+                <li>
+                    <a href="#" class="uk-button uk-button-text uk-text-danger">삭제</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</th:block>
+<th:block th:include="/pagination"></th:block>
+</html>

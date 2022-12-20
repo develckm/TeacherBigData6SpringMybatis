@@ -46,13 +46,16 @@ public class BoardController {
     @GetMapping("/{boardNo}/detail.do")
     public String detail(@PathVariable int boardNo,
                          PagingDto paging,
+                         HttpServletRequest req,
                          Model model){
         //pathVariable : 파라미터가 쿼리스트링으로 오는 것이 보기 좋지 않고 명시적이지 않아서 등장
         //pathVariable : required=true 를 무조건 갖는다.
+        paging.setQueryString(req.getParameterMap());
         BoardDto board=boardService.detail(boardNo);
         List<ReplyDto> replyList=replyService.boardDetailList(boardNo,paging);
         model.addAttribute("board",board);
         model.addAttribute("replyList",replyList);
+        model.addAttribute("paging",paging);
         return  "/board/detail";
     }
 }
