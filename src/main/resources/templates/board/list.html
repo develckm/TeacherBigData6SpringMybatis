@@ -9,6 +9,24 @@
 </head>
 <div layout:fragment="contents">
     <h1>게시글 리스트</h1>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="rows">출력될 게시글 수 : </label>
+
+        <div uk-form-custom="target: > * > span:first-child">
+            <select th:onchange="location.href=`?rows=${this.value}`;"
+                    aria-label="Custom controls" id="rows">
+                <option value="5" th:selected="${paging.rows==5}">5</option>
+                <option value="10" th:selected="${paging.rows==10}">10</option>
+                <option value="15" th:selected="${paging.rows==15}">15</option>
+                <option value="20" th:selected="${paging.rows==20}">20</option>
+            </select>
+            <button class="uk-button uk-button-default" type="button" tabindex="-1">
+                <span></span>
+                <span uk-icon="icon: chevron-down"></span>
+            </button>
+        </div>
+    </div>
+
     <div class="uk-overflow-auto">
         <table class="uk-table uk-table-divider uk-table-hover">
             <thead>

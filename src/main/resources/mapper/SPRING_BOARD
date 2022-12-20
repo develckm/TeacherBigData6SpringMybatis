@@ -1,0 +1,226 @@
+drop database SPRING_BOARD;
+create database SPRING_BOARD;
+
+DROP USER 'board_user'@'localhost';
+CREATE USER 'board_user'@'localhost' IDENTIFIED WITH mysql_native_password BY '1234';
+
+GRANT SELECT, INSERT , UPDATE, DELETE   on SPRING_BOARD.* to 'board_user'@'localhost';
+
+USE SPRING_BOARD;
+
+CREATE TABLE USER(
+	user_id VARCHAR(255),
+	name  VARCHAR(255) NOT NULL,
+	pw  VARCHAR(255) NOT NULL,
+	phone VARCHAR(255) NOT NULL,
+	email VARCHAR(255) NOT NULL,
+	birth DATE NOT NULL,
+	signup DATETIME DEFAULT CURRENT_TIMESTAMP(),
+	CONSTRAINT PRIMARY KEY(user_id), 
+	CONSTRAINT UNIQUE(phone),
+	CONSTRAINT UNIQUE(email)
+);
+
+CREATE TABLE BOARD(
+	board_no INT AUTO_INCREMENT,
+	title VARCHAR(255) NOT NULL,
+	contents VARCHAR(255) DEFAULT '',
+	post_time DATETIME DEFAULT CURRENT_TIMESTAMP(),
+	user_id VARCHAR(255) NOT NULL,
+	views INT  NOT NULL DEFAULT 0 ,
+	PRIMARY KEY(board_no),
+	FOREIGN KEY(user_id) REFERENCES USER(user_id)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE BOARD_IMG(
+	board_img_no INT AUTO_INCREMENT,
+	board_no INT NOT NULL,
+	img_path VARCHAR(255) NOT NULL,
+	PRIMARY KEY(board_img_no),
+	FOREIGN KEY(board_no) REFERENCES BOARD(board_no)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
+
+CREATE TABLE REPLY(
+	reply_no INT AUTO_INCREMENT,
+	title VARCHAR(255) NOT NULL,
+	contents VARCHAR(255) DEFAULT '',
+	post_time DATETIME DEFAULT CURRENT_TIMESTAMP(),
+	img_path VARCHAR(255),
+	
+	board_no INT NOT NULL,
+	user_id VARCHAR(255) NOT NULL,
+	
+	PRIMARY KEY(reply_no),
+	FOREIGN KEY(user_id) REFERENCES USER(user_id)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(board_no) REFERENCES BOARD(board_no)
+	ON UPDATE CASCADE ON DELETE CASCADE
+);
+CREATE TABLE BOARD_PREFER(
+	board_prefer_no INT AUTO_INCREMENT,
+	board_no INT NOT NULL,
+	prefer BOOLEAN,
+	user_id VARCHAR(255) NOT NULL,
+	PRIMARY KEY (board_prefer_no),
+	FOREIGN KEY (user_id) REFERENCES USER(user_id)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (board_no) REFERENCES BOARD(board_no)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+	UNIQUE KEY (board_no,user_id)
+);
+
+CREATE TABLE REPLY_PREFER(
+	reply_prefer_no INT AUTO_INCREMENT,
+	reply_no INT NOT NULL,
+	prefer BOOLEAN,
+	user_id VARCHAR(255) NOT NULL,
+	PRIMARY KEY (reply_prefer_no),
+	FOREIGN KEY (user_id) REFERENCES USER(user_id)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY (reply_no) REFERENCES REPLY(reply_no)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+	UNIQUE KEY (reply_no,user_id)
+);
+INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES 
+('user1','유저1','1234','000-0000-0001','user1@gmail.com','1990-01-01'),
+('user2','유저2','1234','000-0000-0002','user2@gmail.com','1990-02-01'),
+('user3','유저3','1234','000-0000-0003','user3@gmail.com','1990-03-01'),
+('user4','유저4','1234','000-0000-0004','user4@gmail.com','1990-04-01'),
+('user5','유저5','1234','000-0000-0005','user5@gmail.com','1990-05-01'),
+('user6','유저6','1234','000-0000-0006','user6@gmail.com','1990-06-01'),
+('user7','유저7','1234','000-0000-0007','user7@gmail.com','1990-07-01'),
+('user8','유저8','1234','000-0000-0008','user8@gmail.com','1990-08-01'),
+('user9','유저9','1234','000-0000-0009','user9@gmail.com','1990-09-01'),
+('user10','유저10','1234','000-0000-0010','user10@gmail.com','1990-11-01'),
+('user11','유저11','1234','000-0000-0011','user11@gmail.com','1990-12-01'),
+('user12','유저12','1234','000-0000-0012','user12@gmail.com','1991-01-01'),
+('user13','유저13','1234','000-0000-0013','user13@gmail.com','1992-01-01'),
+('user14','유저14','1234','000-0000-0014','user14@gmail.com','1993-01-01'),
+('user15','유저15','1234','000-0000-0015','user15@gmail.com','1994-01-01'),
+('user16','유저16','1234','000-0000-0016','user16@gmail.com','1995-01-01'),
+('user17','유저17','1234','000-0000-0017','user17@gmail.com','1996-01-01'),
+('user18','유저18','1234','000-0000-0018','user18@gmail.com','1997-01-01'),
+('user19','유저19','1234','000-0000-0019','user19@gmail.com','1998-01-01'),
+('user20','유저20','1234','000-0000-0020','user20@gmail.com','2000-01-01'),
+('user21','유저21','1234','000-0000-0021','user21@gmail.com','1980-01-01'),
+('user22','유저22','1234','000-0000-0022','user22@gmail.com','1970-01-01'),
+('user23','유저23','1234','000-0000-0023','user23@gmail.com','1960-01-01'),
+('user24','유저24','1234','000-0000-0024','user24@gmail.com','1950-01-01'),
+('user25','유저25','1234','000-0000-0025','user25@gmail.com','1940-01-01'),
+('user26','유저26','1234','000-0000-0026','user26@gmail.com','1990-01-02'),
+('user27','유저27','1234','000-0000-0027','user27@gmail.com','1990-01-22'),
+('user28','유저28','1234','000-0000-0028','user28@gmail.com','1990-03-11'),
+('user29','유저29','1234','000-0000-0029','user29@gmail.com','1990-04-21'),
+('user30','유저30','1234','000-0000-0030','user30@gmail.com','1990-05-25'),
+('user141','아수르','1234','001-0000-0000','user1@test.com','1999-01-09'),
+('user142','숀펜','1234','002-0000-0000','user2@test.com','1955-01-09'),
+('user143','하우저','1234','003-0000-0000','user3@test.com','1966-01-09'),
+('user144','오펜하이머','1234','004-0000-0000','user4@test.com','1977-01-09'),
+('user145','톰북투','1234','000-0500-0000','user5@test.com','1988-01-09'),
+('user146','렌넬','1234','000-0060-0000','user6@test.com','1922-01-09'),
+('user147','짐바브웨','1234','070-0000-0000','user7@test.com','1933-01-09'),
+('user149','암사','1234','000-0800-0000','user8@test.com','1944-01-09'),
+('user150','난마돌','1234','000-9000-0000','user9@test.com','1944-01-29'),
+('user151','솔로몬','1234','000-0110-0000','user10@test.com','1944-02-09'),
+('user152','나스카','1234','000-0120-0000','user11@test.com','1945-01-09'),
+('user153','찬찬','1234','000-0130-0000','user12@test.com','2000-01-09'),
+('user154','우와','1234','000-1400-0000','user13@test.com','2001-01-09'),
+('user155','포토시','1234','000-0015-0000','user14@test.com','2002-01-09'),
+('user156','코로','1234','000-1600-0000','user15@test.com','2003-01-09'),
+('user157','오카피','1234','000-0017-0000','user16@test.com','1989-01-09'),
+('user158','비룽가','1234','000-0180-0000','user17@test.com','1990-01-09'),
+('user159','가람바','1234','000-1900-0000','user18@test.com','1991-01-09'),
+('user160','투르카나','1234','000-0023-0000','user19@test.com','1992-01-09'),
+('user161','셀루스','1234','000-0550-0000','user20@test.com','1993-01-09'),
+('user162','키레네','1234','000-0770-0000','user21@test.com','1994-01-09'),
+('user163','아스키아','1234','000-6600-0000','user22@test.com','1995-01-09'),
+('user164','젠네','1234','000-0098-0000','user23@test.com','1996-01-09');
+
+
+INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES 
+('awriter','글쓴이','1234','011-7777-7777','awriter@gmail.com','1990-01-01');
+
+INSERT INTO BOARD (title,contents,user_id) VALUES 
+('awriter 가 쓴 1번 글입니다.','글내용입니다.','awriter'),
+('awriter 가 쓴 2번 글입니다.','글내용입니다.','awriter'),
+('awriter 가 쓴 3번 글입니다.','글내용입니다.','awriter'),
+('user1 가 쓴 1번 글입니다.','글내용입니다.','user1'),
+('user1 가 쓴 2번 글입니다.','글내용입니다.','user1'),
+('user1 가 쓴 3번 글입니다.','글내용입니다.','user1'),
+('user2 가 쓴 1번 글입니다.','글내용입니다.','user2'),
+('user2 가 쓴 2번 글입니다.','글내용입니다.','user2'),
+('user2 가 쓴 3번 글입니다.','글내용입니다.','user2'),
+('user3 가 쓴 1번 글입니다.','글내용입니다.','user3'),
+('user3 가 쓴 2번 글입니다.','글내용입니다.','user3'),
+('user3 가 쓴 3번 글입니다.','글내용입니다.','user3'),
+('user4 가 쓴 1번 글입니다.','글내용입니다.','user4'),
+('user4 가 쓴 2번 글입니다.','글내용입니다.','user4'),
+('user4 가 쓴 3번 글입니다.','글내용입니다.','user4'),
+('user5 가 쓴 1번 글입니다.','글내용입니다.','user5'),
+('user5 가 쓴 2번 글입니다.','글내용입니다.','user5'),
+('user5 가 쓴 3번 글입니다.','글내용입니다.','user5'),
+('user6 가 쓴 1번 글입니다.','글내용입니다.','user6'),
+('user6 가 쓴 2번 글입니다.','글내용입니다.','user6'),
+('user6 가 쓴 3번 글입니다.','글내용입니다.','user6'),
+('awriter 가 쓴 4번 글입니다.','글내용입니다.','awriter');
+
+INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES 
+('a_reply_writer','리플글쓴이','1234','011-7778-7778','a_reply_writer@gmail.com','1990-01-01');
+
+
+INSERT INTO REPLY (title,contents,user_id,board_no) VALUES 
+('a_reply_writer 가 쓴 1번 글입니다.','글내용입니다.','a_reply_writer',1),
+('a_reply_writer 가 쓴 2번 글입니다.','글내용입니다.','a_reply_writer',1),
+('a_reply_writer 가 쓴 3번 글입니다.','글내용입니다.','a_reply_writer',1),
+('a_reply_writer 가 쓴 4번 글입니다.','글내용입니다.','a_reply_writer',1),
+('a_reply_writer 가 쓴 5번 글입니다.','글내용입니다.','a_reply_writer',1),
+('a_reply_writer 가 쓴 6번 글입니다.','글내용입니다.','a_reply_writer',1);
+
+
+
+INSERT INTO REPLY_PREFER (reply_no, user_id, prefer)
+VALUES ( 6, 'user1',true),
+ ( 6, 'user2',true ),
+ ( 6, 'user3',true ),
+ ( 6, 'user4',true ),
+ ( 6, 'user5',true ),
+ ( 5, 'user5',true ),
+ ( 5, 'user6',true ),
+ ( 6, 'user7',false),
+ ( 6, 'user8',false),
+ ( 4, 'user1',false),
+ ( 4, 'user2',false),
+ ( 4, 'user3',false),
+ ( 4, 'user4',false),
+ ( 4, 'user5',false),
+ ( 4, 'user6',false);
+
+
+
+
+INSERT INTO BOARD_PREFER (board_no, user_id, prefer)
+VALUES ( 1, 'user1',true),
+ ( 1, 'user2',true ),
+ ( 1, 'user3',true ),
+ ( 1, 'user4',true ),
+ ( 1, 'user5',true ),
+ ( 2, 'user5',true ),
+ ( 2, 'user6',true ),
+ ( 1, 'user7',false),
+ ( 1, 'user8',false),
+ ( 3, 'user1',false),
+ ( 3, 'user2',false),
+ ( 3, 'user3',false),
+ ( 3, 'user4',false),
+ ( 3, 'user5',false),
+ ( 3, 'user6',false);
+ 
+SELECT 
+	board_no no, 
+	title, 
+	(SELECT COUNT(*) FROM BOARD_PREFER WHERE prefer=true AND board_no=no ) good,
+	(SELECT COUNT(*) FROM BOARD_PREFER WHERE prefer=false AND board_no=no ) bad,
+	(SELECT prefer FROM BOARD_PREFER WHERE board_no=no AND user_id='user1' ) '(user1)prefer_active'
+	FROM BOARD;
