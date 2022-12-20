@@ -2,7 +2,9 @@ package com.bigdata6.spring_mybatis.controller;
 
 import com.bigdata6.spring_mybatis.dto.BoardDto;
 import com.bigdata6.spring_mybatis.dto.PagingDto;
+import com.bigdata6.spring_mybatis.dto.ReplyDto;
 import com.bigdata6.spring_mybatis.service.BoardService;
+import com.bigdata6.spring_mybatis.service.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,9 +21,11 @@ import java.util.List;
 @RequestMapping("/board")
 public class BoardController {
     private BoardService boardService;
+    private ReplyService replyService;
     private Logger log= LoggerFactory.getLogger(this.getClass().getSimpleName());
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService,ReplyService replyService) {
         this.boardService = boardService;
+        this.replyService = replyService;
     }
 
     @GetMapping("/list.do")
@@ -41,11 +45,14 @@ public class BoardController {
     }
     @GetMapping("/{boardNo}/detail.do")
     public String detail(@PathVariable int boardNo,
+                         PagingDto paging,
                          Model model){
         //pathVariable : 파라미터가 쿼리스트링으로 오는 것이 보기 좋지 않고 명시적이지 않아서 등장
         //pathVariable : required=true 를 무조건 갖는다.
         BoardDto board=boardService.detail(boardNo);
+        List<ReplyDto> replyList=replyService.boardDetailList(boardNo,paging);
         model.addAttribute("board",board);
+        model.addAttribute("replyList",replyList);
         return  "/board/detail";
     }
 }

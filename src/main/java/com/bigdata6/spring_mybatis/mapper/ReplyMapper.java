@@ -9,6 +9,7 @@ import java.util.List;
 public interface ReplyMapper {
 
     List<ReplyDto> findAll();
+    List<ReplyDto> findByBoardNo(int boardNo); //board 의 collection fetch 조인 하기 위해 작성
     List<ReplyDto> findByBoardNoPaging(int boardNo, PagingDto paging);
     int countByBoardNo(int boardNo, PagingDto paging);
 

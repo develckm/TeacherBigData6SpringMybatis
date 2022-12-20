@@ -9,7 +9,7 @@ public class ReplyDto {
     private String title;//title
     private String contents;//contents
     private Date postTime;//post_time
-    private String impPath;//img_path
+    private String imgPath;//img_path
     private int boardNo;//board_no
     private String userId;//user_id
     private Integer fkReplyNo;//fk_reply_no

@@ -12,7 +12,14 @@
                      column="user_id"
                      select="com.bigdata6.spring_mybatis.mapper.UserMapper.findById"
                      fetchType="lazy"/>
-<!--    <collection property="replyList" column="board_no"/> -->
+       <!-- 페이징을 할 수 없기 때문에 복잡한 조인은 서비스를 따로 호출해야한다.
+       <collection property="replyList"
+                    javaType="java.util.ArrayList"
+                    ofType="ReplyDto"
+                    select="com.bigdata6.spring_mybatis.mapper.ReplyMapper.findByBoardNo"
+                    column="board_no"
+                    fetchType="eager"/>-->
+                    <!-- SELECT * FROM REPLY WHERE board_no=#{boardNo => board.board_no}-->
     </resultMap>
     <!--    association  select(같이 출력할 쿼리 Id) colum(select 에서 사용할 매개변수)
             fetchType.eager(Default) : user 를 사용하든 하지 않든 출력하겠다.

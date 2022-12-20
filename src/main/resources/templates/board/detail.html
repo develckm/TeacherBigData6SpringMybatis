@@ -62,7 +62,46 @@
         </div>
     </div>
     <h2>댓글 리스트</h2>
-    <div th:text="${board.replyList}"></div>
+    <th:block th:each="reply : ${replyList}">
+        <div class="uk-card uk-card-default uk-width-1-1">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div th:if="${reply.getImgPath!=null}" class="uk-width-auto">
+                        <img class="uk-border-circle" width="40" height="40"
+                             th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
+                    </div>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom" th:text="${reply.title}"></h3>
+                        <p class="uk-text-meta uk-margin-remove">
+                            <time datetime="" th:text="${#calendars.format(reply.postTime)}"></time>
+                        </p>
+                        <p class="uk-text-secondary uk-margin-remove">
+                            <span th:text="${reply.userId}"></span>
+                            <span></span>
+                            <span></span>
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="uk-card-body">
+                <p th:text="${reply.contents}"></p>
+            </div>
+            <div class="uk-card-footer">
+                <ul class="uk-breadcrumb">
+                    <li>
+                        <a href="#" class="uk-button uk-button-text uk-text-warning">수정</a>
+                    </li>
+                    <li>
+                        <a href="#" class="uk-button uk-button-text uk-text-primary">등록</a>
+                    </li>
+                    <li>
+                        <a href="#" class="uk-button uk-button-text uk-text-danger">삭제</a>
+                    </li>
+                </ul>
 
+            </div>
+        </div>
+
+    </th:block>
 </div>
 </html>
