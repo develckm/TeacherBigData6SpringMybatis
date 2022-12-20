@@ -1,5 +1,41 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+<th:block th:if="${session.loginUser!=null}">
+    <form action="/reply/register.do" method="post" class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
+        <div class="uk-card-header">
+            <div class="uk-grid-small uk-flex-middle" uk-grid>
+                <div class="uk-width-expand">
+                    <h3 class="uk-card-title uk-margin-remove-bottom">댓글 등록 폼</h3>
+                    <p class="">
+                        <input class="uk-input uk-form-small" name="userId" readonly th:value="${session.loginUser.user_id}">
+                    </p>
+                    <p class="uk-margin-remove-bottom">
+                        <input class="uk-input uk-form-small" name="title" value="" placeholder="제목">
+                    </p>
+                    <p uk-form-custom="target: true">
+                        <input type="file" name="imgFile">
+                        <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일">
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="uk-card-body">
+            <p>
+                <textarea name="contents" class="uk-textarea uk-width-1-1" rows="2" placeholder="내용"></textarea>
+            </p>
+        </div>
+        <div class="uk-card-footer">
+            <ul class="uk-breadcrumb">
+                <li>
+                    <button type="reset" class="uk-button uk-button-text uk-text-warning">초기화</button>
+                </li>
+                <li>
+                    <button type="submit" class="uk-button uk-button-text uk-text-primary">등록</button>
+                </li>
+            </ul>
+        </div>
+    </form>
+</th:block>
 <th:block th:each="reply : ${replyList}">
     <div class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
         <div class="uk-card-header">
