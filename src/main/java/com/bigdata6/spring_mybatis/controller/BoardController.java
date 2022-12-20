@@ -9,7 +9,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -36,5 +38,14 @@ public class BoardController {
         log.info(paging.toString());
 
         return "/board/list";
+    }
+    @GetMapping("/{boardNo}/detail.do")
+    public String detail(@PathVariable int boardNo,
+                         Model model){
+        //pathVariable : 파라미터가 쿼리스트링으로 오는 것이 보기 좋지 않고 명시적이지 않아서 등장
+        //pathVariable : required=true 를 무조건 갖는다.
+        BoardDto board=boardService.detail(boardNo);
+        model.addAttribute("board",board);
+        return  "/board/detail";
     }
 }

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 상세</title>
+</head>
+<div layout:fragment="contents">
+    <h1>
+        <span th:text="${boardNo}"></span>. 게시글 상세 페이지
+    </h1>
+    <p class="uk-text-right">
+        조회수 : <span class="uk-badge" th:text="${board.views}"></span>
+    </p>
+    <p class="uk-text-right">
+        <a class="uk-button uk-button-small uk-button-primary"
+           th:href="@{'modify.do'(boardNo=${board.boardNo})}">수정 폼</a>
+    </p>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="userBoardNo">번호 : </label>
+        <div class="uk-inline uk-form-width-large">
+            <input class="uk-input uk-form-blank" type="text" readonly id="userBoardNo"
+                   th:value="${board.boardNo}" name="boardNo">
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="boardTitle">제목 : </label>
+        <div class="uk-inline uk-form-width-large">
+            <input class="uk-input uk-form-blank" type="text" readonly id="boardTitle"
+                   th:value="${board.title}" name="title">
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="boardUserId">글쓴이(id) : </label>
+        <div class="uk-inline uk-form-width-large">
+            <input class="uk-input uk-form-blank" type="text" readonly id="boardUserId"
+                   th:value="${board.userId}" name="userId">
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="boardUserId">글쓴이(이름,이메일) : </label>
+        <div class="uk-inline uk-padding-small uk-form-width-large">
+            <span th:text="${board.user.name}"></span>
+            , <span th:text="${board.user.email}"></span>
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="boardPostTime">게시글 : </label>
+        <div class="uk-inline uk-form-width-large">
+            <input class="uk-input uk-form-blank" type="text" readonly id="boardPostTime"
+                   th:value="${#calendars.format(board.postTime,'yyyy년 MM월 dd일 HH:mm:ss')}" name="postTime">
+        </div>
+    </div>
+    <div class="uk-margin">
+        <label class="uk-form-label" for="boardContents">내용 : </label>
+        <div class="uk-inline uk-form-width-large">
+            <textarea class="uk-textarea uk-form-blank" rows="5" readonly id="boardContents"
+                      th:text="${board.contents}" name="contents"></textarea>
+        </div>
+    </div>
+    <h2>댓글 리스트</h2>
+    <div th:text="${board.replyList}"></div>
+
+</div>
+</html>

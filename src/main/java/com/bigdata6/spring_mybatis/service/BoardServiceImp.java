@@ -24,7 +24,7 @@ public class BoardServiceImp implements  BoardService{
 
     @Override
     public BoardDto detail(int boardNo) {
-        return null;
+        return boardMapper.findById(boardNo);
     }
 
     @Override

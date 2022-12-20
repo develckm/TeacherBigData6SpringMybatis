@@ -79,7 +79,7 @@
             </thead>
             <tbody>
             <tr th:each="board:${boardList}" style="cursor: pointer"
-                    th:onclick="location.href = [[@{'detail.do' (board_no=${board.boardNo})}]]">
+                    th:onclick="location.href = [[@{'/board/{boardNo}/detail.do' (boardNo=${board.boardNo})}]]">
                     <td th:text="${board.boardNo}"></td>
                     <td th:text="${board.title}"></td>
                     <td th:text="${board.userId}"></td>

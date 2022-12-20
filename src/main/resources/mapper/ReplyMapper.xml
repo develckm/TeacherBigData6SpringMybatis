@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bigdata6.spring_mybatis.mapper.ReplyMapper">
+    <resultMap id="replyMap" type="ReplyDto" autoMapping="true">
+        <id column="reply_no" property="replyNo" />
+        <result property="impPath" column="img_path"/>
+        <result property="postTime" column="post_time"/>
+        <result property="boardNo" column="board_no"/>
+        <result property="userId" column="user_id"/>
+        <result property="fkReplyNo" column="fk_reply_no"/>
+    </resultMap>
+    <insert id="insert" parameterType="ReplyDto">
+        INSERT INTO REPLY ( title, contents, user_id, img_path)
+            VALUE (#{title},#{contents},#{userId},#{impPath})
+    </insert>
+    <update id="updateById">
+        UPDATE REPLY
+            SET title=#{title}, contents=#{contents},img_path=#{impPath}
+            WHERE reply_no=#{replyNo}
+    </update>
+    <delete id="deleteById">
+        DELETE FROM REPLY WHERE reply_no=#{replyNo}
+    </delete>
+    <select id="findAll" resultMap="replyMap">
+        SELECT * FROM REPLY
+    </select>
+    <!-- parameterType 자동완성 된다.   -->
+    <select id="findByBoardNoPaging" resultMap="replyMap">
+        SELECT * FROM REPLY
+                 WHERE board_no=#{boardNo}
+                 ORDER BY
+                <choose>
+                    <when test="paging.orderField==null">board_no</when>
+                    <otherwise>${paging.orderField}</otherwise>
+                </choose>
+                    ${paging.direct}
+                 LIMIT #{paging.startRow},#{paging.rows}
+    </select>
+    <select id="countByBoardNo" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM REPLY WHERE board_no=#{boardNo}
+    </select>
+    <select id="findById" resultMap="replyMap">
+        SELECT * FROM REPLY WHERE reply_no=#{replyNo}
+    </select>
+    <select id="findByUserIdPaging" resultMap="replyMap"></select>
+    <select id="countByUserId" resultType="java.lang.Integer"></select>
+</mapper>
