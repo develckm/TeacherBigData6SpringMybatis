@@ -69,6 +69,7 @@
 function init(){
     const replyListContainer=document.getElementById("replyListContainer");
     const pageBtns=replyListContainer.querySelectorAll(".uk-pagination a");
+    const replyRegisterForm=document.forms["replyRegisterForm"];
     pageBtns.forEach((btn)=>{
         btn.onclick=async (e)=>{
             e.preventDefault();
@@ -80,7 +81,24 @@ function init(){
             replyListContainer.innerHTML=html;
             init();
         }
-    })
+    });
+    replyRegisterForm.onsubmit=async (e)=>{
+        e.preventDefault();
+        let url="/reply/register.do";
+        const formData=new FormData(replyRegisterForm);
+        //let queryString="?userId="+replyRegisterForm.userId.value+"&title="+replyRegisterForm.title.value;
+        //post 통신으로 하더라도 fetch 로 통신시 파라미터를 queryString 을 생성해서 통신해야 한다.!!
+        //multipart/form-data 로 전달할때는 new FormData(formNode)를 넣으면 자동으로 파라미터 생성
+        const resp=await fetch(url,{method:"POST",body:formData});
+        const json=await resp.json();
+        console.log(json);
+        if(json.state==1){
+            const resp= await fetch("/reply/[[${boardNo}]]/list.do");
+            const html=await resp.text();
+            replyListContainer.innerHTML=html;
+            init();
+        }
+    }
 }
 init();
 </script>

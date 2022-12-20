@@ -38,6 +38,6 @@ public class ReplyServiceImp implements ReplyService{
 
     @Override
     public int registerOne(ReplyDto reply) {
-        return 0;
+        return replyMapper.insert(reply);
     }
 }

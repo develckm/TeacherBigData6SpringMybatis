@@ -1,7 +1,8 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:if="${session.loginUser!=null}">
-    <form action="/reply/register.do" method="post" class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
+    <form name="replyRegisterForm" enctype="multipart/form-data" action="/reply/register.do" method="post" class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
+        <input type="hidden" name="boardNo" th:value="${boardNo}">
         <div class="uk-card-header">
             <div class="uk-grid-small uk-flex-middle" uk-grid>
                 <div class="uk-width-expand">

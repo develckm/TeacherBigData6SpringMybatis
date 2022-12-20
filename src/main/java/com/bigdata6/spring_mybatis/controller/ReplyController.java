@@ -4,11 +4,10 @@ import com.bigdata6.spring_mybatis.dto.PagingDto;
 import com.bigdata6.spring_mybatis.dto.ReplyDto;
 import com.bigdata6.spring_mybatis.service.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -30,5 +29,18 @@ public class ReplyController {
         model.addAttribute("replyList",replyList);
         model.addAttribute("paging",paging);
         return "/reply/list";
+    }
+    @Data
+    class AjaxSateHandler{
+        private int state=0; //0:실패 1:성공  (statusCode : 400(badRequest),500(db 통신 오류), 405(Method 오류))
+    }
+    @PostMapping("/register.do")
+    public @ResponseBody AjaxSateHandler register(ReplyDto reply){
+        AjaxSateHandler ajaxSateHandler=new AjaxSateHandler();
+        int register=0;
+        register=replyService.registerOne(reply);
+        ajaxSateHandler.setState(register);
+        return ajaxSateHandler;
+        //return "{\"state\":"+register+"}";
     }
 }
