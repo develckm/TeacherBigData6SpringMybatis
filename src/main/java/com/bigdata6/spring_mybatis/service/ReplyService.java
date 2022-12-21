@@ -14,4 +14,5 @@ public interface ReplyService {
     int removeOne(int replyNo);
     int modifyOne(ReplyDto reply);
     int registerOne(ReplyDto reply);
+    ReplyDto detail(int replyNo); //수정 페이지 요청
 }

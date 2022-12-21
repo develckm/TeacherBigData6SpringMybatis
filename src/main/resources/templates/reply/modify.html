@@ -1,17 +1,24 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <form name="replyModifyForm" enctype="multipart/form-data" action="/reply/modify.do" method="post" class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
-    <input type="hidden" name="boardNo" th:value="">
-    <input type="hidden" name="fkReplyNo">
+  <form   th:onsubmit="event.preventDefault(); modifyReply(this);"
+          name="replyModifyForm" enctype="multipart/form-data" action="/reply/modify.do" method="post" class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
+    <input type="hidden" name="boardNo" th:value="${reply.boardNo}">
+    <input type="hidden" name="fkReplyNo" th:value="${reply.fkReplyNo}">
+    <input type="hidden" name="replyNo" th:value="${reply.replyNo}">
+
     <div class="uk-card-header">
       <div class="uk-grid-small uk-flex-middle" uk-grid>
         <div class="uk-width-expand">
-          <h3 class="uk-card-title uk-margin-remove-bottom">댓글 수정 폼</h3>
+          <h3 class="uk-card-title uk-margin-remove-bottom">
+            <span th:text="${reply.replyNo}"></span>.
+            댓글 수정 폼
+            <small class="uk-text-meta" th:text="${reply.postTime}"></small>
+          </h3>
           <p class="">
-            <input class="uk-input uk-form-small" name="userId" readonly th:value="">
+            <input class="uk-input uk-form-small" name="userId" readonly th:value="${reply.userId}">
           </p>
           <p class="uk-margin-remove-bottom">
-            <input class="uk-input uk-form-small" name="title" value="" placeholder="제목">
+            <input class="uk-input uk-form-small" name="title" th:value="${reply.title}" placeholder="제목">
           </p>
           <p uk-form-custom="target: true">
             <input type="file" name="imgFile">
@@ -22,7 +29,8 @@
     </div>
     <div class="uk-card-body">
       <p>
-        <textarea name="contents" class="uk-textarea uk-width-1-1" rows="2" placeholder="내용"></textarea>
+        <textarea th:text="${reply.contents}"
+                  name="contents" class="uk-textarea uk-width-1-1" rows="2" placeholder="내용"></textarea>
       </p>
     </div>
     <div class="uk-card-footer">

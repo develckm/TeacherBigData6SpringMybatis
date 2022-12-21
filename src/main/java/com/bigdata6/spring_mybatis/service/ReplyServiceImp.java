@@ -33,11 +33,16 @@ public class ReplyServiceImp implements ReplyService{
 
     @Override
     public int modifyOne(ReplyDto reply) {
-        return 0;
+        return replyMapper.updateById(reply);
     }
 
     @Override
     public int registerOne(ReplyDto reply) {
         return replyMapper.insert(reply);
+    }
+
+    @Override
+    public ReplyDto detail(int replyNo) {
+        return replyMapper.findById(replyNo);
     }
 }

@@ -1,38 +1,44 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <th:block th:each="reply : ${replyList}">
-    <div class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
-        <div class="uk-card-header">
-            <div class="uk-grid-small uk-flex-middle" uk-grid>
-                <div th:if="${reply.getImgPath!=null}" class="uk-width-auto">
-                    <img class="uk-border-circle" width="40" height="40"
-                         th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
-                </div>
-                <div class="uk-width-expand">
-                    <h3 class="uk-card-title uk-margin-remove-bottom">
-                        <span th:text="${reply.replyNo}"></span>.
-                        <span th:text="${reply.title}"></span>
-                    </h3>
-                    <p class="uk-text-meta uk-margin-remove">
-                        <time datetime="" th:text="${#calendars.format(reply.postTime)}"></time>
-                    </p>
-                    <p class="uk-margin-remove">
-                        <span th:text="${reply.userId}"></span>
-                        참조하는 부모의 pk : <span th:text="${reply.fkReplyNo}"></span>
-                        <span></span>
-                    </p>
+    <div  class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
+        <div th:id="'replyContainer'+${reply.replyNo}">
+            <div class="uk-card-header">
+                <div class="uk-grid-small uk-flex-middle" uk-grid>
+                    <div th:if="${reply.getImgPath!=null}" class="uk-width-auto">
+                        <img class="uk-border-circle" width="40" height="40"
+                             th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
+                    </div>
+                    <div class="uk-width-expand">
+                        <h3 class="uk-card-title uk-margin-remove-bottom">
+                            <span th:text="${reply.replyNo}"></span>.
+                            <span th:text="${reply.title}"></span>
+                        </h3>
+                        <p class="uk-text-meta uk-margin-remove">
+                            <time datetime="" th:text="${#calendars.format(reply.postTime)}"></time>
+                        </p>
+                        <p class="uk-margin-remove">
+                            <span th:text="${reply.userId}"></span>
+                            참조하는 부모의 pk : <span th:text="${reply.fkReplyNo}"></span>
+                            <span></span>
+                        </p>
+                    </div>
                 </div>
             </div>
+            <div class="uk-card-body">
+                <p th:text="${reply.contents}"></p>
+            </div>
         </div>
-        <div class="uk-card-body">
-            <p th:text="${reply.contents}"></p>
-        </div>
+
+
         <div class="uk-card-footer">
             <th:block th:if="${session.loginUser!=null}">
                 <ul class="uk-breadcrumb">
                     <th:block th:if="${ #strings.equals(session.loginUser.user_id,reply.userId)}">
                         <li>
-                            <a href="#" class="uk-button uk-button-text uk-text-warning">수정</a>
+                            <a href="javascript:void(0)"
+                               th:onclick="loadReplyModifyForm([[${reply.replyNo}]])"
+                               class="uk-button uk-button-text uk-text-warning">수정</a>
                         </li>
                         <li>
                             <a href="javascript:void(0)"
