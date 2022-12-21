@@ -28,7 +28,7 @@ public class ReplyServiceImp implements ReplyService{
 
     @Override
     public int removeOne(int replyNo) {
-        return 0;
+        return replyMapper.deleteById(replyNo);
     }
 
     @Override

@@ -73,16 +73,30 @@
 
 function loadRegisterForm(replyNo){
     const replyRegisterForm=document.forms["replyRegisterForm"];
-    const cloneForm=replyRegisterForm.cloneNode(true);
-    cloneForm.onsubmit=function (e){
-        loadReplyList(e,cloneForm);
+    const cloneForm=replyRegisterForm.cloneNode(true); //등록폼 가져와서 복사
+    cloneForm.onsubmit=function (e){ //복사된 폼의 등록 이벤트 재정의
+        registerReply(e,cloneForm);
     }
-    cloneForm.fkReplyNo.value=replyNo;
+    cloneForm.fkReplyNo.value=replyNo; //복사된 폼의 참조하는 부모 번호 정의
     let selector="reReplyRegisterContainer"+replyNo;
-    const reReplyRegisterContainer=document.getElementById(selector);
+    const reReplyRegisterContainer=document.getElementById(selector); //복사한 폼의 옮길 위치
     reReplyRegisterContainer.append(cloneForm);
 }
-
+async function removeReply(replyNo){
+    let url="/reply/delete.do?replyNo="+replyNo;
+    const resp=await fetch(url,{method:"DELETE"});
+    if(resp.status===200){
+        const json=await resp.json();
+        if(json.state==1){
+            await loadReplyList();
+            alert("삭제 성공!");
+        }else{
+            alert("삭제할 레코드가 없습니다.");
+        }
+    }else{
+        alert(`삭제 실패! ${resp.status}`);
+    }
+}
 function init(){
     const pageBtns=replyListContainer.querySelectorAll(".uk-pagination a");
     const replyRegisterForm=document.forms["replyRegisterForm"];
@@ -99,11 +113,11 @@ function init(){
         }
     });
     replyRegisterForm.onsubmit=function (e){
-        loadReplyList(e,replyRegisterForm);
+        registerReply(e,replyRegisterForm);
     };
 }
 init();
-async function loadReplyList(e , replyRegisterForm){
+async function registerReply(e , replyRegisterForm){
     e.preventDefault();
     let url="/reply/register.do";
     const formData=new FormData(replyRegisterForm);
@@ -114,11 +128,14 @@ async function loadReplyList(e , replyRegisterForm){
     const json=await resp.json();
     console.log(json);
     if(json.state==1){
-        const resp= await fetch("/reply/[[${boardNo}]]/list.do");
-        const html=await resp.text();
-        replyListContainer.innerHTML=html;
-        init();
+        await loadReplyList();
     }
+}
+async function loadReplyList(){
+    const resp= await fetch("/reply/[[${boardNo}]]/list.do");
+    const html=await resp.text();
+    replyListContainer.innerHTML=html;
+    init();
 }
 
 </script>

@@ -35,7 +35,9 @@
                             <a href="#" class="uk-button uk-button-text uk-text-warning">수정</a>
                         </li>
                         <li>
-                            <a href="#" class="uk-button uk-button-text uk-text-danger">삭제</a>
+                            <a href="javascript:void(0)"
+                               th:onclick="removeReply([[${reply.replyNo}]])"
+                               class="uk-button uk-button-text uk-text-danger">삭제</a>
                         </li>
                     </th:block>
                     <li>
