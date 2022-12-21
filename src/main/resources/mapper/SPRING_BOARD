@@ -52,10 +52,14 @@ CREATE TABLE REPLY(
 	board_no INT NOT NULL,
 	user_id VARCHAR(255) NOT NULL,
 	
+	fk_reply_no INT,
+
 	PRIMARY KEY(reply_no),
 	FOREIGN KEY(user_id) REFERENCES USER(user_id)
 	ON UPDATE CASCADE ON DELETE CASCADE,
 	FOREIGN KEY(board_no) REFERENCES BOARD(board_no)
+	ON UPDATE CASCADE ON DELETE CASCADE,
+	FOREIGN KEY(fk_reply_no) REFERENCES REPLY(reply_no)
 	ON UPDATE CASCADE ON DELETE CASCADE
 );
 CREATE TABLE BOARD_PREFER(
@@ -83,7 +87,7 @@ CREATE TABLE REPLY_PREFER(
 	ON UPDATE CASCADE ON DELETE CASCADE,
 	UNIQUE KEY (reply_no,user_id)
 );
-INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES 
+INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES
 ('user1','유저1','1234','000-0000-0001','user1@gmail.com','1990-01-01'),
 ('user2','유저2','1234','000-0000-0002','user2@gmail.com','1990-02-01'),
 ('user3','유저3','1234','000-0000-0003','user3@gmail.com','1990-03-01'),
@@ -139,10 +143,10 @@ INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES
 ('user164','젠네','1234','000-0098-0000','user23@test.com','1996-01-09');
 
 
-INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES 
+INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES
 ('awriter','글쓴이','1234','011-7777-7777','awriter@gmail.com','1990-01-01');
 
-INSERT INTO BOARD (title,contents,user_id) VALUES 
+INSERT INTO BOARD (title,contents,user_id) VALUES
 ('awriter 가 쓴 1번 글입니다.','글내용입니다.','awriter'),
 ('awriter 가 쓴 2번 글입니다.','글내용입니다.','awriter'),
 ('awriter 가 쓴 3번 글입니다.','글내용입니다.','awriter'),
@@ -166,11 +170,11 @@ INSERT INTO BOARD (title,contents,user_id) VALUES
 ('user6 가 쓴 3번 글입니다.','글내용입니다.','user6'),
 ('awriter 가 쓴 4번 글입니다.','글내용입니다.','awriter');
 
-INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES 
+INSERT INTO USER (user_id,name,pw,phone,email,birth) VALUES
 ('a_reply_writer','리플글쓴이','1234','011-7778-7778','a_reply_writer@gmail.com','1990-01-01');
 
 
-INSERT INTO REPLY (title,contents,user_id,board_no) VALUES 
+INSERT INTO REPLY (title,contents,user_id,board_no) VALUES
 ('a_reply_writer 가 쓴 1번 글입니다.','글내용입니다.','a_reply_writer',1),
 ('a_reply_writer 가 쓴 2번 글입니다.','글내용입니다.','a_reply_writer',1),
 ('a_reply_writer 가 쓴 3번 글입니다.','글내용입니다.','a_reply_writer',1),
@@ -178,6 +182,11 @@ INSERT INTO REPLY (title,contents,user_id,board_no) VALUES
 ('a_reply_writer 가 쓴 5번 글입니다.','글내용입니다.','a_reply_writer',1),
 ('a_reply_writer 가 쓴 6번 글입니다.','글내용입니다.','a_reply_writer',1);
 
+INSERT INTO REPLY (fk_reply_no,title,contents,user_id,board_no) VALUES
+(1,'user1 가 1번 댓글에 쓴 1번 글입니다.','글내용입니다.','user1',1),
+(1,'user1 가 1번 댓글에 쓴 2번 글입니다.','글내용입니다.','user1',1),
+(7,'user2 가 1번 댓글의 7번 댓글에 쓴 1번 글입니다.','글내용입니다.','user2',1),
+(7,'user3 가 1번 댓글의 7번 댓글에 쓴 2번 글입니다.','글내용입니다.','user3',1);
 
 
 INSERT INTO REPLY_PREFER (reply_no, user_id, prefer)
@@ -216,10 +225,10 @@ VALUES ( 1, 'user1',true),
  ( 3, 'user4',false),
  ( 3, 'user5',false),
  ( 3, 'user6',false);
- 
-SELECT 
-	board_no no, 
-	title, 
+
+SELECT
+	board_no no,
+	title,
 	(SELECT COUNT(*) FROM BOARD_PREFER WHERE prefer=true AND board_no=no ) good,
 	(SELECT COUNT(*) FROM BOARD_PREFER WHERE prefer=false AND board_no=no ) bad,
 	(SELECT prefer FROM BOARD_PREFER WHERE board_no=no AND user_id='user1' ) '(user1)prefer_active'
