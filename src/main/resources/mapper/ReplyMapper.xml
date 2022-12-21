@@ -8,6 +8,14 @@
         <result property="boardNo" column="board_no"/>
         <result property="userId" column="user_id"/>
         <result property="fkReplyNo" column="fk_reply_no"/>
+        <collection property="replyList"
+                    autoMapping="true"
+                    javaType="java.util.ArrayList"
+                    ofType="ReplyDto"
+                    select="findByFkReplyNo"
+                    column="reply_no"
+                    fetchType="lazy">
+        </collection>
     </resultMap>
     <!-- SELECT LAST_INSERT_ID() id  => param.reply.setReplyNo(id)-->
     <insert id="insert" parameterType="ReplyDto" useGeneratedKeys="true" keyProperty="replyNo">
@@ -22,8 +30,14 @@
     <delete id="deleteById">
         DELETE FROM REPLY WHERE reply_no=#{replyNo}
     </delete>
+    <!---->
     <select id="findAll" resultMap="replyMap">
-        SELECT * FROM REPLY
+        SELECT * FROM REPLY WHERE fk_reply_no IS NULL
+           /* r LEFT JOIN REPLY rr
+                ON r.reply_no=rr.fk_reply_no
+            LEFT JOIN REPLY rrr
+                ON rr.reply_no=rrr.fk_reply_no
+            WHERE r.fk_reply_no IS NULL*/
     </select>
     <!-- parameterType 자동완성 된다.   -->
     <select id="findByBoardNoPaging" resultMap="replyMap">
@@ -48,4 +62,7 @@
     </select>
     <select id="findByUserIdPaging" resultMap="replyMap"></select>
     <select id="countByUserId" resultType="java.lang.Integer"></select>
+    <select id="findByFkReplyNo" resultMap="replyMap">
+        SELECT * FROM REPLY WHERE fk_reply_no=#{replyNo}
+    </select>
 </mapper>

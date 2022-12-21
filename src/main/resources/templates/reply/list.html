@@ -46,13 +46,16 @@
                          th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
                 </div>
                 <div class="uk-width-expand">
-                    <h3 class="uk-card-title uk-margin-remove-bottom" th:text="${reply.title}"></h3>
+                    <h3 class="uk-card-title uk-margin-remove-bottom">
+                        <span th:text="${reply.replyNo}"></span>.
+                        <span th:text="${reply.title}"></span>
+                    </h3>
                     <p class="uk-text-meta uk-margin-remove">
                         <time datetime="" th:text="${#calendars.format(reply.postTime)}"></time>
                     </p>
-                    <p class="uk-text-meta uk-margin-remove">
+                    <p class="uk-margin-remove">
                         <span th:text="${reply.userId}"></span>
-                        <span></span>
+                        참조하는 부모의 pk : <span th:text="${reply.fkReplyNo}"></span>
                         <span></span>
                     </p>
                 </div>
