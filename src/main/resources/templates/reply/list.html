@@ -1,42 +1,5 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<th:block th:if="${session.loginUser!=null}">
-    <form name="replyRegisterForm" enctype="multipart/form-data" action="/reply/register.do" method="post" class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
-        <input type="hidden" name="boardNo" th:value="${boardNo}">
-        <div class="uk-card-header">
-            <div class="uk-grid-small uk-flex-middle" uk-grid>
-                <div class="uk-width-expand">
-                    <h3 class="uk-card-title uk-margin-remove-bottom">댓글 등록 폼</h3>
-                    <p class="">
-                        <input class="uk-input uk-form-small" name="userId" readonly th:value="${session.loginUser.user_id}">
-                    </p>
-                    <p class="uk-margin-remove-bottom">
-                        <input class="uk-input uk-form-small" name="title" value="" placeholder="제목">
-                    </p>
-                    <p uk-form-custom="target: true">
-                        <input type="file" name="imgFile">
-                        <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일">
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="uk-card-body">
-            <p>
-                <textarea name="contents" class="uk-textarea uk-width-1-1" rows="2" placeholder="내용"></textarea>
-            </p>
-        </div>
-        <div class="uk-card-footer">
-            <ul class="uk-breadcrumb">
-                <li>
-                    <button type="reset" class="uk-button uk-button-text uk-text-warning">초기화</button>
-                </li>
-                <li>
-                    <button type="submit" class="uk-button uk-button-text uk-text-primary">등록</button>
-                </li>
-            </ul>
-        </div>
-    </form>
-</th:block>
 <th:block th:each="reply : ${replyList}">
     <div class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
         <div class="uk-card-header">
@@ -64,18 +27,35 @@
         <div class="uk-card-body">
             <p th:text="${reply.contents}"></p>
         </div>
-        <div th:if="${session.loginUser!=null && #strings.equals(session.loginUser.user_id,reply.userId)}"
-             class="uk-card-footer">
-            <ul class="uk-breadcrumb">
-                <li>
-                    <a href="#" class="uk-button uk-button-text uk-text-primary">수정</a>
-                </li>
-                <li>
-                    <a href="#" class="uk-button uk-button-text uk-text-danger">삭제</a>
-                </li>
-            </ul>
+        <div class="uk-card-footer">
+            <th:block th:if="${session.loginUser!=null}">
+                <ul class="uk-breadcrumb">
+                    <th:block th:if="${ #strings.equals(session.loginUser.user_id,reply.userId)}">
+                        <li>
+                            <a href="#" class="uk-button uk-button-text uk-text-warning">수정</a>
+                        </li>
+                        <li>
+                            <a href="#" class="uk-button uk-button-text uk-text-danger">삭제</a>
+                        </li>
+                    </th:block>
+                    <li>
+                        <a href="javascript:void(0)"
+                           th:onclick="loadRegisterForm( [[${reply.replyNo}]] )"
+                           class="uk-button uk-button-text uk-text-primary">등록폼</a>
+                    </li>
+
+                </ul>
+            </th:block>
+            <div th:id="${'reReplyRegisterContainer'+reply.replyNo}"></div>
+            <!-- collection Fetch select 를 하면 레코드가 없어도 무조건 List 객체 생성 -->
+            <div th:if="${reply.replyList!=null && reply.replyList.size()>0}"
+                 th:with="replyList=${reply.replyList},paging=null"
+                 class="uk-grid-small uk-flex-top" uk-grid>
+                <span class="uk-width-auto" uk-icon="reply" style="transform: rotate(-180deg)"></span>
+                <div class="uk-width-expand uk-padding-remove-left" th:include="/reply/list"></div>
+            </div>
         </div>
     </div>
 </th:block>
-<th:block th:include="/pagination"></th:block>
+<th:block th:if="${paging!=null}" th:include="/pagination"></th:block>
 </html>

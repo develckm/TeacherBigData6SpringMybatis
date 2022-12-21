@@ -62,12 +62,28 @@
         </div>
     </div>
     <h2>댓글 리스트</h2>
+    <div th:if="${session.loginUser!=null}" id="replyRegisterContainer">
+        <th:block th:include="/reply/register"></th:block>
+    </div>
     <div id="replyListContainer">
         <th:block th:include="/reply/list"></th:block>
     </div>
 <script th:inline="javascript">
-function init(){
     const replyListContainer=document.getElementById("replyListContainer");
+
+function loadRegisterForm(replyNo){
+    const replyRegisterForm=document.forms["replyRegisterForm"];
+    const cloneForm=replyRegisterForm.cloneNode(true);
+    cloneForm.onsubmit=function (e){
+        loadReplyList(e,cloneForm);
+    }
+    cloneForm.fkReplyNo.value=replyNo;
+    let selector="reReplyRegisterContainer"+replyNo;
+    const reReplyRegisterContainer=document.getElementById(selector);
+    reReplyRegisterContainer.append(cloneForm);
+}
+
+function init(){
     const pageBtns=replyListContainer.querySelectorAll(".uk-pagination a");
     const replyRegisterForm=document.forms["replyRegisterForm"];
     pageBtns.forEach((btn)=>{
@@ -82,25 +98,29 @@ function init(){
             init();
         }
     });
-    replyRegisterForm.onsubmit=async (e)=>{
-        e.preventDefault();
-        let url="/reply/register.do";
-        const formData=new FormData(replyRegisterForm);
-        //let queryString="?userId="+replyRegisterForm.userId.value+"&title="+replyRegisterForm.title.value;
-        //post 통신으로 하더라도 fetch 로 통신시 파라미터를 queryString 을 생성해서 통신해야 한다.!!
-        //multipart/form-data 로 전달할때는 new FormData(formNode)를 넣으면 자동으로 파라미터 생성
-        const resp=await fetch(url,{method:"POST",body:formData});
-        const json=await resp.json();
-        console.log(json);
-        if(json.state==1){
-            const resp= await fetch("/reply/[[${boardNo}]]/list.do");
-            const html=await resp.text();
-            replyListContainer.innerHTML=html;
-            init();
-        }
-    }
+    replyRegisterForm.onsubmit=function (e){
+        loadReplyList(e,replyRegisterForm);
+    };
 }
 init();
+async function loadReplyList(e , replyRegisterForm){
+    e.preventDefault();
+    let url="/reply/register.do";
+    const formData=new FormData(replyRegisterForm);
+    //let queryString="?userId="+replyRegisterForm.userId.value+"&title="+replyRegisterForm.title.value;
+    //post 통신으로 하더라도 fetch 로 통신시 파라미터를 queryString 을 생성해서 통신해야 한다.!!
+    //multipart/form-data 로 전달할때는 new FormData(formNode)를 넣으면 자동으로 파라미터 생성
+    const resp=await fetch(url,{method:"POST",body:formData});
+    const json=await resp.json();
+    console.log(json);
+    if(json.state==1){
+        const resp= await fetch("/reply/[[${boardNo}]]/list.do");
+        const html=await resp.text();
+        replyListContainer.innerHTML=html;
+        init();
+    }
+}
+
 </script>
 
 </div>

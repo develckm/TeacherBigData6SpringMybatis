@@ -19,8 +19,8 @@
     </resultMap>
     <!-- SELECT LAST_INSERT_ID() id  => param.reply.setReplyNo(id)-->
     <insert id="insert" parameterType="ReplyDto" useGeneratedKeys="true" keyProperty="replyNo">
-        INSERT INTO REPLY ( title, contents, board_no, user_id, img_path)
-            VALUE (#{title},#{contents},#{boardNo},#{userId},#{imgPath})
+        INSERT INTO REPLY ( title, contents, board_no, user_id, img_path,fk_reply_no)
+            VALUE (#{title},#{contents},#{boardNo},#{userId},#{imgPath},#{fkReplyNo})
     </insert>
     <update id="updateById">
         UPDATE REPLY
@@ -43,6 +43,7 @@
     <select id="findByBoardNoPaging" resultMap="replyMap">
         SELECT * FROM REPLY
                  WHERE board_no=#{boardNo}
+                    AND fk_reply_no IS NULL
                  ORDER BY
                 <choose>
                     <when test="paging.orderField==null">board_no</when>
