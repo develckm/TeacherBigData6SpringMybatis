@@ -54,14 +54,32 @@
                    th:value="${#calendars.format(board.postTime,'yyyy년 MM월 dd일 HH:mm:ss')}" name="postTime">
         </div>
     </div>
-    <div class="uk-margin">
-        <figure th:each="boardImg:${board.boardImgList}">
-            <img th:src="@{'/img/{file}'(file=${boardImg.imgPath})}">
-            <figcaption>
-                <span th:text="${boardImg.boardImgNo}"></span> 번
-                이미지
-            </figcaption>
-        </figure>
+    <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slider="clsActivated: uk-transition-active; center: true">
+        <div class="uk-slider-container uk-light" th:if="${board.boardImgList!=null}">
+            <ul class="uk-slider-items uk-grid">
+                <th:block  th:each="boardImg:${board.boardImgList}"
+                           th:with="size=${board.boardImgList.size()}">
+                    <li class="uk-width-3-4" >
+                        <div class="uk-panel">
+                            <img class="uk-width-1-1"
+                                    th:src="@{'/img/{file}'(file=${boardImg.imgPath})}">
+                            <div class="uk-overlay uk-overlay-primary uk-position-bottom uk-text-center uk-transition-slide-bottom">
+                                <h3 class="uk-margin-remove">
+                                    <span th:text="${boardImg.boardImgNo}"></span> 번
+                                    이미지
+                                </h3>
+                                <p class="uk-margin-remove">
+                                    board : baord_img = 1:N
+                                </p>
+                            </div>
+                        </div>
+                    </li>
+                </th:block>
+            </ul>
+            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
+            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
+            <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
+        </div>
     </div>
     <div class="uk-margin">
         <label class="uk-form-label" for="boardContents">내용 : </label>
