@@ -48,11 +48,20 @@
         </div>
     </div>
     <div class="uk-margin">
-        <label class="uk-form-label" for="boardPostTime">게시글 : </label>
+        <label class="uk-form-label" for="boardPostTime">게시일 : </label>
         <div class="uk-inline uk-form-width-large">
             <input class="uk-input uk-form-blank" type="text" readonly id="boardPostTime"
                    th:value="${#calendars.format(board.postTime,'yyyy년 MM월 dd일 HH:mm:ss')}" name="postTime">
         </div>
+    </div>
+    <div class="uk-margin">
+        <figure th:each="boardImg:${board.boardImgList}">
+            <img th:src="@{'/img/{file}'(file=${boardImg.imgPath})}">
+            <figcaption>
+                <span th:text="${boardImg.boardImgNo}"></span> 번
+                이미지
+            </figcaption>
+        </figure>
     </div>
     <div class="uk-margin">
         <label class="uk-form-label" for="boardContents">내용 : </label>

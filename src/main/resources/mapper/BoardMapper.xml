@@ -12,6 +12,10 @@
                      column="user_id"
                      select="com.bigdata6.spring_mybatis.mapper.UserMapper.findById"
                      fetchType="lazy"/>
+        <collection property="boardImgList"
+                    select="com.bigdata6.spring_mybatis.mapper.BoardImgMapper.findByBoardNo"
+                    column="board_no"
+                    fetchType="lazy"/>
        <!-- 페이징을 할 수 없기 때문에 복잡한 조인은 서비스를 따로 호출해야한다.
        <collection property="replyList"
                     javaType="java.util.ArrayList"

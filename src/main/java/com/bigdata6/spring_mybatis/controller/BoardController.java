@@ -1,9 +1,6 @@
 package com.bigdata6.spring_mybatis.controller;
 
-import com.bigdata6.spring_mybatis.dto.BoardDto;
-import com.bigdata6.spring_mybatis.dto.PagingDto;
-import com.bigdata6.spring_mybatis.dto.ReplyDto;
-import com.bigdata6.spring_mybatis.dto.UserDto;
+import com.bigdata6.spring_mybatis.dto.*;
 import com.bigdata6.spring_mybatis.service.BoardService;
 import com.bigdata6.spring_mybatis.service.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -17,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -74,20 +72,25 @@ public class BoardController {
         int register=0;
         if(loginUser.getUser_id().equals(board.getUserId())){
             try {
+                List<BoardImgDto> boardImgList=new ArrayList<BoardImgDto>();
                 for(MultipartFile imgFile : imgFiles){
                     if(imgFile!=null && !imgFile.isEmpty()){
                         String []contentsTypes=imgFile.getContentType().split("/");
                         if (contentsTypes[0].equals("image")){
                             try {
                                 String fileName="board_"+System.currentTimeMillis()+"_"+(int)(Math.random()*10000)+"."+contentsTypes[1];
-                                Path path =Paths.get("/"+fileName);
+                                Path path =Paths.get(imgPath+"/"+fileName);
+                                imgFile.transferTo(path);
+                                BoardImgDto boardImg=new BoardImgDto();
+                                boardImg.setImgPath(fileName);
+                                boardImgList.add(boardImg);
                             }catch (Exception e){
                                 log.error(e.getMessage());
                             }
                         }
                     }
                 }
-
+                board.setBoardImgList(boardImgList);
                 register=boardService.register(board);
 
 

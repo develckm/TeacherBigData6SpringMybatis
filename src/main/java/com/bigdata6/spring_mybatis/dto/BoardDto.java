@@ -7,7 +7,7 @@ import java.util.List;
 
 @Data
 public class BoardDto {
-    private String boardNo;//board_no
+    private int boardNo;//board_no
     private String title;//title
     private String contents;//contents
     private Date postTime;//post_time
