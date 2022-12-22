@@ -5,10 +5,6 @@
         <div th:id="'replyContainer'+${reply.replyNo}">
             <div class="uk-card-header">
                 <div class="uk-grid-small uk-flex-middle" uk-grid>
-                    <div th:if="${reply.getImgPath!=null}" class="uk-width-auto">
-                        <img class="uk-border-circle" width="40" height="40"
-                             th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
-                    </div>
                     <div class="uk-width-expand">
                         <h3 class="uk-card-title uk-margin-remove-bottom">
                             <span th:text="${reply.replyNo}"></span>.
@@ -25,8 +21,12 @@
                     </div>
                 </div>
             </div>
-            <div class="uk-card-body">
-                <p th:text="${reply.contents}"></p>
+            <div class="uk-card-body uk-grid-small uk-flex-middle uk-padding" uk-grid>
+                <div th:if="${reply.getImgPath!=null}" class="uk-width-auto">
+                    <img class="uk-object-cover" style="width: 100px; height: 100px;"
+                         th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
+                </div>
+                <p  class="uk-width-expand" th:text="${reply.contents}"></p>
             </div>
         </div>
 

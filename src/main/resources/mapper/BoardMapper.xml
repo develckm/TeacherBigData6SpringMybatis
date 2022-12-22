@@ -59,4 +59,8 @@
     <update id="updateViews">
         UPDATE BOARD SET views=views+1 WHERE board_no=#{boardNo}
     </update>
+    <!--int insert(BoardDto dto)-->
+    <insert id="insert" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="boardNo">
+        INSERT INTO BOARD (title,contents,user_id) VALUE (#{title},#{contents},#{userId})
+    </insert>
 </mapper>

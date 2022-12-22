@@ -15,4 +15,5 @@ public class BoardDto {
     private UserDto user; //Board : User = N : 1 (fk user_id)
     private int views;//views
     private List<ReplyDto> replyList;
+    private List<BoardImgDto> boardImgList;
 }

@@ -1,47 +1,55 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <form   th:onsubmit="event.preventDefault(); modifyReply(this);"
-          name="replyModifyForm" enctype="multipart/form-data" action="/reply/modify.do" method="post" class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
+<form th:onsubmit="event.preventDefault(); modifyReply(this);"
+      name="replyModifyForm" enctype="multipart/form-data" action="/reply/modify.do" method="post"
+      class="uk-margin-bottom uk-card uk-card-default uk-width-1-1">
     <input type="hidden" name="boardNo" th:value="${reply.boardNo}">
     <input type="hidden" name="fkReplyNo" th:value="${reply.fkReplyNo}">
     <input type="hidden" name="replyNo" th:value="${reply.replyNo}">
+    <input type="hidden" name="imgPath" th:value="${reply.imgPath}">
 
     <div class="uk-card-header">
-      <div class="uk-grid-small uk-flex-middle" uk-grid>
-        <div class="uk-width-expand">
-          <h3 class="uk-card-title uk-margin-remove-bottom">
-            <span th:text="${reply.replyNo}"></span>.
-            댓글 수정 폼
-            <small class="uk-text-meta" th:text="${reply.postTime}"></small>
-          </h3>
-          <p class="">
-            <input class="uk-input uk-form-small" name="userId" readonly th:value="${reply.userId}">
-          </p>
-          <p class="uk-margin-remove-bottom">
-            <input class="uk-input uk-form-small" name="title" th:value="${reply.title}" placeholder="제목">
-          </p>
-          <p uk-form-custom="target: true">
-            <input type="file" name="imgFile">
-            <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일">
-          </p>
+        <div class="uk-grid-small uk-flex-middle" uk-grid>
+            <div class="uk-width-expand">
+                <h3 class="uk-card-title uk-margin-remove-bottom">
+                    <span th:text="${reply.replyNo}"></span>.
+                    댓글 수정 폼
+                    <small class="uk-text-meta" th:text="${reply.postTime}"></small>
+                </h3>
+                <p class="">
+                    <input class="uk-input uk-form-small" name="userId" readonly th:value="${reply.userId}">
+                </p>
+                <p class="uk-margin-remove-bottom">
+                    <input class="uk-input uk-form-small" name="title" th:value="${reply.title}" placeholder="제목">
+                </p>
+                <p uk-form-custom="target: true">
+                    <input type="file" name="imgFile">
+                    <input class="uk-input uk-form-small" type="text"
+                           placeholder="수정할 이미지 파일">
+                </p>
+            </div>
         </div>
-      </div>
     </div>
-    <div class="uk-card-body">
-      <p>
-        <textarea th:text="${reply.contents}"
-                  name="contents" class="uk-textarea uk-width-1-1" rows="2" placeholder="내용"></textarea>
-      </p>
+    <div class="uk-card-body uk-grid-small uk-flex-middle uk-padding" uk-grid>
+        <div th:if="${reply.getImgPath!=null}" class="uk-width-auto">
+            <img class="uk-object-cover" style="width: 100px; height: 100px;"
+                 th:src="@{'/img/{imgPath}'(imgPath=${reply.getImgPath})}" alt="Avatar">
+        </div>
+        <p  class="uk-width-expand">
+            <textarea th:text="${reply.contents}"
+                      name="contents" class="uk-textarea uk-width-1-1" rows="2" placeholder="내용"></textarea>
+
+        </p>
     </div>
     <div class="uk-card-footer">
-      <ul class="uk-breadcrumb">
-        <li>
-          <button type="reset" class="uk-button uk-button-text uk-text-warning">초기화</button>
-        </li>
-        <li>
-          <button type="submit" class="uk-button uk-button-text uk-text-primary">수정</button>
-        </li>
-      </ul>
+        <ul class="uk-breadcrumb">
+            <li>
+                <button type="reset" class="uk-button uk-button-text uk-text-warning">초기화</button>
+            </li>
+            <li>
+                <button type="submit" class="uk-button uk-button-text uk-text-primary">수정</button>
+            </li>
+        </ul>
     </div>
-  </form>
+</form>
 </html>

@@ -3,18 +3,20 @@ package com.bigdata6.spring_mybatis.controller;
 import com.bigdata6.spring_mybatis.dto.BoardDto;
 import com.bigdata6.spring_mybatis.dto.PagingDto;
 import com.bigdata6.spring_mybatis.dto.ReplyDto;
+import com.bigdata6.spring_mybatis.dto.UserDto;
 import com.bigdata6.spring_mybatis.service.BoardService;
 import com.bigdata6.spring_mybatis.service.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @Controller
@@ -23,6 +25,8 @@ public class BoardController {
     private BoardService boardService;
     private ReplyService replyService;
     private Logger log= LoggerFactory.getLogger(this.getClass().getSimpleName());
+    @Value("${img.upload.path}")
+    private String imgPath;
     public BoardController(BoardService boardService,ReplyService replyService) {
         this.boardService = boardService;
         this.replyService = replyService;
@@ -57,5 +61,44 @@ public class BoardController {
         model.addAttribute("replyList",replyList);
         model.addAttribute("paging",paging);
         return  "/board/detail";
+    }
+    @GetMapping("/register.do")
+    public void register(@SessionAttribute UserDto loginUser){}
+    @PostMapping("/register.do")
+    public String register(
+            BoardDto board,
+            @SessionAttribute UserDto loginUser,
+            @RequestParam(required = false, name = "imgFile") MultipartFile [] imgFiles
+
+        ){
+        int register=0;
+        if(loginUser.getUser_id().equals(board.getUserId())){
+            try {
+                for(MultipartFile imgFile : imgFiles){
+                    if(imgFile!=null && !imgFile.isEmpty()){
+                        String []contentsTypes=imgFile.getContentType().split("/");
+                        if (contentsTypes[0].equals("image")){
+                            try {
+                                String fileName="board_"+System.currentTimeMillis()+"_"+(int)(Math.random()*10000)+"."+contentsTypes[1];
+                                Path path =Paths.get("/"+fileName);
+                            }catch (Exception e){
+                                log.error(e.getMessage());
+                            }
+                        }
+                    }
+                }
+
+                register=boardService.register(board);
+
+
+            }catch (Exception e){
+                log.error(e.getMessage());
+            }
+        }
+        if(register>0){
+            return "redirect:/board/"+board.getBoardNo()+"/detail.do";
+        }else {
+            return "redirect:/board/register.do";
+        }
     }
 }

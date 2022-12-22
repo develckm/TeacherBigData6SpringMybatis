@@ -24,6 +24,7 @@ public class BoardServiceImp implements  BoardService{
 
     @Override
     public BoardDto detail(int boardNo) {
+        boardMapper.updateViews(boardNo);
         return boardMapper.findById(boardNo);
     }
 
@@ -39,6 +40,6 @@ public class BoardServiceImp implements  BoardService{
 
     @Override
     public int register(BoardDto board) {
-        return 0;
+        return boardMapper.insert(board);
     }
 }
