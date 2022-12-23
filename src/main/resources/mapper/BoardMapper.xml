@@ -67,4 +67,8 @@
     <insert id="insert" parameterType="BoardDto" useGeneratedKeys="true" keyProperty="boardNo">
         INSERT INTO BOARD (title,contents,user_id) VALUE (#{title},#{contents},#{userId})
     </insert>
+    <insert id="updateById" parameterType="BoardDto">
+        UPDATE BOARD SET title=#{title},contents=#{contents},user_id=#{userId}  WHERE board_no=#{boardNo}
+    </insert>
+
 </mapper>

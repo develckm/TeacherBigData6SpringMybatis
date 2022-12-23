@@ -1,5 +1,6 @@
 package com.bigdata6.spring_mybatis.controller;
 
+import com.bigdata6.spring_mybatis.ImgFileUploadUtil;
 import com.bigdata6.spring_mybatis.dto.*;
 import com.bigdata6.spring_mybatis.service.BoardService;
 import com.bigdata6.spring_mybatis.service.ReplyService;
@@ -42,7 +43,6 @@ public class BoardController {
         model.addAttribute("boardList",boardList);
         model.addAttribute("paging",paging);
         log.info(paging.toString());
-
         return "/board/list";
     }
     @GetMapping("/{boardNo}/detail.do")
@@ -61,7 +61,11 @@ public class BoardController {
         return  "/board/detail";
     }
     @GetMapping("/register.do")
-    public void register(@SessionAttribute UserDto loginUser){}
+    public void register(@SessionAttribute UserDto loginUser){
+        log.info(imgPath);
+        log.info("bb");
+
+    }
     @PostMapping("/register.do")
     public String register(
             BoardDto board,
@@ -113,4 +117,53 @@ public class BoardController {
         return  "/board/modify";
     }
 
+    @PostMapping("/modify.do")
+    public String mpdify(      BoardDto board,
+                               @RequestParam(required = false, name = "delImgNo") int [] delImgNos,
+                               @RequestParam(required = false, name = "imgFile") MultipartFile [] imgFiles,
+                               @SessionAttribute UserDto loginUser
+
+    ){
+        int modify=0;
+        List<String> saveFileNames=new ArrayList<String>(); //저장 실패시 삭제용
+        List<BoardImgDto> delBoardImgList=null;
+        log.info(board.toString());
+        if(loginUser.getUser_id().equals(board.getUserId())){
+            try {
+                List<BoardImgDto> boardImgList=new ArrayList<BoardImgDto>();
+                for(MultipartFile imgFile : imgFiles){
+                    String saveFileName=ImgFileUploadUtil.save(imgFile,imgPath,"board");
+                    if(saveFileName!=null){
+                        saveFileNames.add(saveFileName);
+                        BoardImgDto boardImg=new BoardImgDto();
+                        boardImg.setImgPath(saveFileName);
+                        log.info(boardImg.toString());
+                        boardImgList.add(boardImg);
+                    }
+                }
+                board.setBoardImgList(boardImgList);
+                delBoardImgList=boardService.modify(board,delImgNos); //수정 성공하면 삭제할 이미지 반환됨
+                modify=1;
+            }catch (Exception e){
+                e.printStackTrace();
+                log.error(e.getMessage());
+                int delImgCount=ImgFileUploadUtil.remove(imgPath,saveFileNames);
+                log.error("삭제된 이미지 :"+delImgCount);
+            }
+        }
+        if(modify>0){
+            try {
+                if(delBoardImgList!=null){//수정할 때 반환받은 삭제할 이미지 리스트로 삭제
+                    for(BoardImgDto delBoardImg : delBoardImgList){
+                        ImgFileUploadUtil.remove(imgPath,delBoardImg.getImgPath());
+                    }
+                }
+            }catch (Exception e){
+                log.error(e.getMessage());
+            }
+            return "redirect:/board/"+board.getBoardNo()+"/detail.do";
+        }else {
+            return "redirect:/board/"+board.getBoardNo()+"/modify.do";
+        }
+    }
 }

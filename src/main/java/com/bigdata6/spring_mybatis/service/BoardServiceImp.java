@@ -5,16 +5,19 @@ import com.bigdata6.spring_mybatis.dto.BoardImgDto;
 import com.bigdata6.spring_mybatis.dto.PagingDto;
 import com.bigdata6.spring_mybatis.mapper.BoardImgMapper;
 import com.bigdata6.spring_mybatis.mapper.BoardMapper;
-import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class BoardServiceImp implements  BoardService{
     private BoardMapper boardMapper;
     private BoardImgMapper boardImgMapper;
+    @Value("${img.upload.path}")
+    private String imgPath;
 
     public BoardServiceImp(BoardMapper boardMapper, BoardImgMapper boardImgMapper) {
         this.boardMapper = boardMapper;
@@ -33,10 +36,26 @@ public class BoardServiceImp implements  BoardService{
         boardMapper.updateViews(boardNo);
         return boardMapper.findById(boardNo);
     }
-
+    @Transactional
     @Override
-    public int modify(BoardDto board, int[] delImgNos) {
-        return 0;
+    public List<BoardImgDto> modify(BoardDto board, int[] delImgNos) {
+        int modify=0;
+        List<BoardImgDto> delBoardImgDtoList=new ArrayList<BoardImgDto>();
+        if(delImgNos!=null){ //이미지 삭제미 보드 이미지 레코드
+            for(int delImgNo:delImgNos){
+                BoardImgDto boardImgDto=boardImgMapper.findOne(delImgNo);
+                delBoardImgDtoList.add(boardImgDto);
+                boardImgMapper.deleteOne(delImgNo);
+            }
+        }
+        if(board.getBoardImgList()!=null){
+            for(BoardImgDto boardImg:board.getBoardImgList()){
+                boardImg.setBoardNo(board.getBoardNo());
+                boardImgMapper.insertOne(boardImg);
+            }
+        }
+        boardMapper.updateById(board);
+        return delBoardImgDtoList;
     }
 
     @Override

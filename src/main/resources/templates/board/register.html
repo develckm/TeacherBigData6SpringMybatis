@@ -17,26 +17,27 @@
                     <p class="">
                         <input class="uk-input uk-form-small" name="userId" readonly th:value="${session.loginUser.user_id}">
                     </p>
-                    <p class="uk-margin-remove-bottom">
+                    <p class="">
                         <input class="uk-input uk-form-small" name="title" value="" placeholder="제목">
                     </p>
-                    <p uk-form-custom="target: true">
-                        <input type="file" name="imgFile">
-                        <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 1">
-                    </p>
-                    <p uk-form-custom="target: true">
-                        <input type="file" name="imgFile">
-                        <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 2">
-                    </p>
-                    <p uk-form-custom="target: true">
-                        <input type="file" name="imgFile">
-                        <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 3">
-                    </p>
-                    <p uk-form-custom="target: true">
-                        <input type="file" name="imgFile">
-                        <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 4">
-                    </p>
-
+                    <div uk-grid class="">
+                        <div uk-form-custom="target: true">
+                            <input type="file" name="imgFile">
+                            <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 1">
+                        </div>
+                        <div uk-form-custom="target: true">
+                            <input type="file" name="imgFile">
+                            <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 2">
+                        </div>
+                        <div uk-form-custom="target: true">
+                            <input type="file" name="imgFile">
+                            <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 2">
+                        </div>
+                        <div uk-form-custom="target: true">
+                            <input type="file" name="imgFile">
+                            <input class="uk-input uk-form-small" type="text" placeholder="이미지 파일 2">
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
