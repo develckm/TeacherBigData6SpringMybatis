@@ -17,7 +17,7 @@
     </p>
     <p class="uk-text-right">
         <a class="uk-button uk-button-small uk-button-primary"
-           th:href="@{'modify.do'(boardNo=${board.boardNo})}">수정 폼</a>
+           th:href="@{'/board/{boardNo}/modify.do'(boardNo=${board.boardNo})}">수정 폼</a>
     </p>
     <div class="uk-margin">
         <label class="uk-form-label" for="userBoardNo">번호 : </label>
@@ -54,31 +54,23 @@
                    th:value="${#calendars.format(board.postTime,'yyyy년 MM월 dd일 HH:mm:ss')}" name="postTime">
         </div>
     </div>
-    <div class="uk-position-relative uk-visible-toggle" tabindex="-1" uk-slider="clsActivated: uk-transition-active; center: true">
-        <div class="uk-slider-container uk-light" th:if="${board.boardImgList!=null}">
-            <ul class="uk-slider-items uk-grid">
-                <th:block  th:each="boardImg:${board.boardImgList}"
-                           th:with="size=${board.boardImgList.size()}">
-                    <li class="uk-width-3-4" >
-                        <div class="uk-panel">
-                            <img class="uk-width-1-1"
-                                    th:src="@{'/img/{file}'(file=${boardImg.imgPath})}">
-                            <div class="uk-overlay uk-overlay-primary uk-position-bottom uk-text-center uk-transition-slide-bottom">
-                                <h3 class="uk-margin-remove">
-                                    <span th:text="${boardImg.boardImgNo}"></span> 번
-                                    이미지
-                                </h3>
-                                <p class="uk-margin-remove">
-                                    board : baord_img = 1:N
-                                </p>
-                            </div>
-                        </div>
-                    </li>
-                </th:block>
+    <div class="uk-position-relative"
+         uk-slideshow="animation: slide; autoplay: true;autoplay-interval: 3000;">
+        <ul class="uk-slideshow-items">
+            <li th:each="boardImg:${board.boardImgList}">
+                <img th:src="@{'/img/{file}'(file=${boardImg.imgPath})}"
+                    alt="" uk-cover>
+            </li>
+        </ul>
+        <div class="uk-position-bottom-center uk-position-small">
+            <ul class="uk-thumbnav">
+                <li th:each="boardImg,i:${board.boardImgList}"
+                        th:attr="uk-slideshow-item=${(i.count)-1}">
+                    <a href="#">
+                        <img th:src="@{'/img/{file}'(file=${boardImg.imgPath})}" width="100" height="67" alt="">
+                    </a>
+                </li>
             </ul>
-            <a class="uk-position-center-left uk-position-small uk-hidden-hover" href="#" uk-slidenav-previous uk-slider-item="previous"></a>
-            <a class="uk-position-center-right uk-position-small uk-hidden-hover" href="#" uk-slidenav-next uk-slider-item="next"></a>
-            <ul class="uk-slider-nav uk-dotnav uk-flex-center uk-margin"></ul>
         </div>
     </div>
     <div class="uk-margin">

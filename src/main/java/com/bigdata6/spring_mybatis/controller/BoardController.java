@@ -104,4 +104,13 @@ public class BoardController {
             return "redirect:/board/register.do";
         }
     }
+    @GetMapping("/{boardNo}/modify.do")
+    public String modify(@PathVariable int boardNo,
+                         @SessionAttribute UserDto loginUser,
+                         Model model){
+        BoardDto board=boardService.detail(boardNo);
+        model.addAttribute("board",board);
+        return  "/board/modify";
+    }
+
 }

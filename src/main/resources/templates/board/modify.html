@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{/layout}">
+
+<head>
+    <meta charset="UTF-8">
+    <title>게시글 수정폼</title>
+</head>
+<div layout:fragment="contents">
+    <h1>
+        <span th:text="${board.boardNo}"></span>. 게시글 수정 페이지
+    </h1>
+    <form action="/board/modify.do" method="post" enctype="multipart/form-data">
+
+        <p class="uk-text-right">
+            조회수 : <span class="uk-badge" th:text="${board.views}"></span>
+        </p>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="userBoardNo">번호 : </label>
+            <div class="uk-inline uk-form-width-large">
+                <input class="uk-input uk-form-blank" type="text" readonly id="userBoardNo"
+                       th:value="${board.boardNo}" name="boardNo">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="boardTitle">제목 : </label>
+            <div class="uk-inline uk-form-width-large">
+                <input class="uk-input" type="text"  id="boardTitle"
+                       th:value="${board.title}" name="title">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="boardUserId">글쓴이(id) : </label>
+            <div class="uk-inline uk-form-width-large">
+                <input class="uk-input uk-form-blank" type="text" readonly id="boardUserId"
+                       th:value="${board.userId}" name="userId">
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="boardUserId">글쓴이(이름,이메일) : </label>
+            <div class="uk-inline uk-padding-small uk-form-width-large">
+                <span th:text="${board.user.name}"></span>
+                , <span th:text="${board.user.email}"></span>
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="boardPostTime">게시일 : </label>
+            <div class="uk-inline uk-form-width-large">
+                <input class="uk-input uk-form-blank" type="text" readonly id="boardPostTime"
+                       th:value="${#calendars.format(board.postTime,'yyyy년 MM월 dd일 HH:mm:ss')}">
+            </div>
+        </div>
+        <div class="uk-position-relative"
+             uk-slideshow="animation: slide; autoplay: true;autoplay-interval: 3000;">
+            <ul class="uk-slideshow-items">
+                <li th:each="boardImg:${board.boardImgList}">
+                    <img th:src="@{'/img/{file}'(file=${boardImg.imgPath})}"
+                        alt="" uk-cover>
+                </li>
+            </ul>
+            <div class="uk-position-top uk-position-small uk-padding-small uk-overlay-primary">
+                <h5 class="uk-text-center">삭제할 이미지 선택</h5>
+                <ul class="uk-thumbnav uk-flex-center">
+                    <label th:each="boardImg,i:${board.boardImgList}" th:for="'delNo'+${boardImg.boardImgNo}">
+                        <li
+                                th:attr="uk-slideshow-item=${(i.count)-1}" th:classappend="uk-form-danger">
+                            <a href="#">
+                                    <img th:src="@{'/img/{file}'(file=${boardImg.imgPath})}" width="100" height="67" alt="">
+                            </a>
+                        </li>
+                        <input th:id="'delNo'+${boardImg.boardImgNo}" th:value="${boardImg.boardImgNo}" name="boardImgNo" type="checkbox">
+                    </label>
+                </ul>
+            </div>
+        </div>
+        <div class="uk-margin">
+            <label class="uk-form-label" for="boardContents">내용 : </label>
+            <div class="uk-inline uk-form-width-large">
+                <textarea class="uk-textarea " rows="5" id="boardContents"
+                          th:text="${board.contents}" name="contents"></textarea>
+            </div>
+        </div>
+        <div class="uk-margin">
+            <button type="reset" class="uk-button uk-button-default">초기화</button>
+            <a th:href="@{'delete.do'(boardNo=${board.boardNo})}"></a>
+            <button type="submit" class="uk-button uk-button-primary">수정</button>
+        </div>
+    </form>
+</div>
+</html>
