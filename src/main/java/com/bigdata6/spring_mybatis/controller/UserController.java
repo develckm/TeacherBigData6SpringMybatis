@@ -50,13 +50,18 @@ public class UserController {
         return model;
     }
     @GetMapping("/modify.do")
-    public void modify(
-            @RequestParam(name = "user_id") String userId,
+    public String modify(
+            @RequestParam(name = "user_id",required = false) String userId,
             Model model,
             @SessionAttribute UserDto loginUser
         ){
-        UserDto user=userService.detail(userId);
-        model.addAttribute("user",user);
+        if(userId!=null){
+            UserDto user=userService.detail(userId);
+            model.addAttribute("user",user);
+            return "/user/modify";
+        }else{
+            return "redirect:/user/list.do";
+        }
     }
     @PostMapping("/modify.do")
     public String modify(UserDto user,
@@ -115,13 +120,18 @@ public class UserController {
     public String login(
             @RequestParam(name = "user_id") String userId,
             String pw,
-            HttpSession session){
+            HttpSession session,
+            @SessionAttribute(required = false) String redirectUri
+            ){
         UserDto user=userService.login(userId,pw);
         session.setAttribute("loginUser",user);
         if(user==null){
             return "redirect:/user/login.do";
         }else{
-            return "redirect:/";
+            if(redirectUri==null){
+                return "redirect:/";
+            }
+            return "redirect:"+redirectUri;
         }
     }
     @GetMapping("/logout.do")
