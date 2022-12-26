@@ -15,6 +15,10 @@ class BoardMapperTest {
     private  BoardMapper boardMapper;
     private Logger log= LoggerFactory.getLogger(this.getClass().getSimpleName());
     @Test
+    void countPreferById(){
+        log.info(boardMapper.countPreferById(1).toString());
+    }
+    @Test
     void findAll() {
         //log.info(boardMapper.findAll().toString());
         //fetch.lazy의 트리거가 되기때문에 board 출력시 무조건 user를 호출한다.
@@ -35,7 +39,7 @@ class BoardMapperTest {
 
     @Test
     void findById() {
-        boardMapper.findById(1);
+       log.info(boardMapper.findById(1).toString());
     }
 
     @Test

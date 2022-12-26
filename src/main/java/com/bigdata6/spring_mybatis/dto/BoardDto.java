@@ -16,4 +16,7 @@ public class BoardDto {
     private int views;//views
     private List<ReplyDto> replyList;
     private List<BoardImgDto> boardImgList;
+
+    private BoardPreferViewDto boardPreferView; //화면에 출력될 좋아요 싫어요 수와 로그인한 사람이 누른 버튼의 상태
+
 }

@@ -9,5 +9,61 @@
 </head>
 <div layout:fragment="contents">
     <h1>SPRING_MYBATIS 로 DB 접속을 관리하자!</h1>
+    <h2>게시글의 좋아요 싫어요 구현하기</h2>
+    <h3>SPRING_BOARD.BOARD_PREFER</h3>
+    <ol>
+        <li>BOARD_PREFER 테이블에 대응되는 BoardPreferDto POJO 생성
+            <ul>
+                <li>board_prefer_no :pk</li>
+                <li>board_no : 좋아요 싫어요를 한 게시글 fk</li>
+                <li>prefer : 0.싫어요, 1.좋아요</li>
+                <li>user_id : 좋아요 싫어요를 한 사람</li>
+                <li>board_no+user_id(uk) : 해당 게시글에 유저가 한번만 좋아요를 정의하도록 uk로 정의함</li>
+            </ul>
+        </li>
+        <li>BoardPreferViewDto 생성 : 게시글 상세에 출력될 좋아요 싫어요 내역
+            <ul>
+                <li>likes: 해당 게시글에 좋아요를 한 수 countByBoardNoAndPreferIsTrue(boardNo )</li>
+                <li>bads: 해당 게시글에 싫어요를 한 수 countByBoardNoAndPreferIsFalse(boardNo )</li>
+                <li>loginUserPrefer : 로그인한 유저가 해당글에 좋아요 싫어요를 했는지 findByBoardNoAndUserId(boardNo,userId)</li>
+            </ul>
+        </li>
+        <li>BoardDto.BoardPreferViewDto (boardPreferView) 필드 생성 : 게시글 상세에 출력될 좋아요 싫어요 내역
+        <li>BoardPreferMapper 인터페이스와 xml 을 생성하고 사용할 sql 문 정의
+            <ul>
+                <li>게시글 조회시 좋아요를 한 수 : countByBoardNoAndPreferIsTrue(int boardNo)</li>
+                <li>게시글 조회시 싫어요를 한 수 : countByBoardNoAndPreferIsFalse(int boardNo)</li>
+                <li>게시글에서 좋아요,싫어요 를 등록 : insert(boardPrefer)</li>
+                <li>게시글에서 좋아요,싫어요 를 수정 (좋아요를 싫어요로 변경) update(boardPrefer)</li>
+                <li>게시글에서 좋아요,싫어요 를 삭제 (좋아요를 취소하면 삭제) delete(int boardPreferNo)</li>
+                <li>로그인한 유저가 해당 게시글에 좋아요 싫어요를 했는지 확인 
+                    (한번만 정의하기 위해 확인용+뷰에 로그인한 사람이 좋아요를 했다면 표시하기 위해) 
+                    findByBoardNoAndUserId(int boardNo,String userId)
+                </li>
+            </ul>
+        </li>
+        <li>BoardPreferMapperTest 생성후 테스트 진행</li>
+        <li>BoardMapper 인터페이스와 xml에 countPreferById 생성하고 사용할 sql 문 정의
+            <ul>
+                <li>게시글 조회시 좋아요와 싫어요를를 한 수  : BoardPreferViewDto countPreferById(int boardNo)</li>
+                <li>resultMap.BoardPreferViewMap 정의 후 countPreferById를 fetch 조인으로 출력하게 변경 , 호출</li>
+                <li>BoardPreferViewDto.likes=countByBoardNoAndPreferIsTrue</li>
+                <li>BoardPreferViewDto.bads=countByBoardNoAndPreferIsFalse</li>
+                <li>resultMap.BoardMap.boardPreferView 를 BoardPreferViewMap으로 정의 </li>
+            </ul>
+        </li>
+        <li>BoardMapperTest 에 countPreferById 테스트 후 findById 에서 좋아요 싫어요 내역 출력 확인하기</li>
+
+        <li>BoardPreferService 생성
+            <ul>
+                <li>BoardPreferViewDto detailBoardPreferView(boardNo,loginUserId) : 해당 게시글에 출력될 좋아요 싫어요 내역 BoardPreferViewDto 생성</li>
+                <li>int register(BoardPreferDto boardPrefer) : 좋아요 싫어요 등록</li>
+                <li>int modify(BoardPreferDto boardPrefer) : 좋아요를 싫어요로 수정</li>
+                <li>int remove(int boardPreferNo) : 좋아요를 삭제</li>
+                <li>BoardPreferDto detail(int boardNo,String loginUserId) : 로그인한 유저가 해당 게시글에 좋아요를 했는지 확인 </li>
+            </ul>
+        </li>
+        <li></li>
+    </ol>
 </div>
 </html>

@@ -12,6 +12,8 @@
                      column="user_id"
                      select="com.bigdata6.spring_mybatis.mapper.UserMapper.findById"
                      fetchType="lazy"/>
+        <association property="boardPreferView" resultMap="BoardPreferViewMap"
+                    fetchType="lazy"/>
         <collection property="boardImgList"
                     select="com.bigdata6.spring_mybatis.mapper.BoardImgMapper.findByBoardNo"
                     column="board_no"
@@ -29,6 +31,15 @@
             fetchType.eager(Default) : user 를 사용하든 하지 않든 출력하겠다.
             fetchType.lazy : view(thymeleaf)에서 조인해야지만 요청 가능한 user 필드를 작성해야지 조인함 (toString()도 출력 조건에 해당 )
      -->
+    <resultMap id="BoardPreferViewMap" type="BoardPreferViewDto">
+        <association    property="likes"
+                        select="com.bigdata6.spring_mybatis.mapper.BoardPreferMapper.countByBoardNoAndPreferIsTrue"
+                        column="board_no"/>
+        <association    property="bads"
+                        select="com.bigdata6.spring_mybatis.mapper.BoardPreferMapper.countByBoardNoAndPreferIsFalse"
+                        column="board_no"/>
+
+    </resultMap>
     <select id="findAll" resultMap="boardMap">
 <!--        SELECT * FROM BOARD INNER JOIN USER USING (user_id)-->
         SELECT * FROM BOARD
@@ -40,6 +51,9 @@
         SELECT COUNT(*) FROM BOARD
     </select>
     <select id="findById" resultMap="boardMap" parameterType="Integer">
+        SELECT * FROM BOARD WHERE board_no=#{id}
+    </select>
+    <select id="countPreferById"  resultMap="BoardPreferViewMap">
         SELECT * FROM BOARD WHERE board_no=#{id}
     </select>
 

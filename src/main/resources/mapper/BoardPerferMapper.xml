@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.bigdata6.spring_mybatis.mapper.BoardPreferMapper">
+    <resultMap id="BoardPreferMap" type="BoardPreferDto">
+        <id property="boardPreferNo" column="board_prefer_no"/>
+        <result property="boardNo" column="board_no"/>
+        <result property="prefer" column="prefer"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="boardPreferNo">
+        INSERT INTO BOARD_PREFER (board_no, prefer, user_id) VALUE (#{boardNo},#{prefer},#{userId})
+    </insert>
+    <update id="update">
+        UPDATE BOARD_PREFER SET prefer=#{prefer} WHERE board_prefer_no=#{boardPreferNo}
+    </update>
+    <delete id="delete">
+        DELETE FROM BOARD_PREFER WHERE board_prefer_no=#{boardPreferNo}
+    </delete>
+    <select id="countByBoardNoAndPreferIsTrue" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM BOARD_PREFER WHERE board_no=#{boardNo} AND prefer=true;
+    </select>
+    <select id="countByBoardNoAndPreferIsFalse" resultType="java.lang.Integer">
+        SELECT COUNT(*) FROM BOARD_PREFER WHERE board_no=#{boardNo} AND prefer=false;
+    </select>
+
+    <select id="findByBoardNoAndUserId" resultMap="BoardPreferMap">
+        SELECT * FROM BOARD_PREFER WHERE board_no=#{boardNo} AND user_id=#{userId}
+    </select>
+
+</mapper>

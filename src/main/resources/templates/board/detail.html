@@ -34,6 +34,11 @@
         </div>
     </div>
     <div class="uk-margin">
+        <label class="uk-form-label" for="boardTitle">좋아요 : </label>
+        <th:block th:include="/board/boardPrefer" th:with="prefer=${board.boardPreferView}"></th:block>
+    </div>
+
+    <div class="uk-margin">
         <label class="uk-form-label" for="boardUserId">글쓴이(id) : </label>
         <div class="uk-inline uk-form-width-large">
             <input class="uk-input uk-form-blank" type="text" readonly id="boardUserId"
