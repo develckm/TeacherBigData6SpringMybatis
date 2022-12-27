@@ -63,7 +63,40 @@
                 <li>BoardPreferDto detail(int boardNo,String loginUserId) : 로그인한 유저가 해당 게시글에 좋아요를 했는지 확인 </li>
             </ul>
         </li>
-        <li></li>
+        <li>BoardController.detail(get:"/baoard/detail.do") 에 로그인한 유저가 있으면 BoardPreferService.detail 호출해서 좋아요 싫어요 내역 확인및 추가</li>
+        <li>templates/board/boardPrefer.html 생성 및 templates/board/detail.html 에 th:include 로 포함
+            <ul>
+                <li>board 상세 페이지에 board.boardPreferView 를 호출하면  boardPrefer.html 을 포함하면 자동으로 조인해서 출력함</li>
+                <li>BoardMapper.BoardMap.boardPreferView 을  BoardPreferViewMap 으로 맵팽했고 해당 map 에서 다시 호출을 정의함.</li>
+                <li> 엄치척 아이콘 추가 : https://heroicons.com/ 에서 svg 복사 </li>
+                <li> uikit 의 버튼에 아웃라인만 있는 디자인이 없어서 .like_button,.bad_button 추가 </li>
+                <li> 로그인한 유저가 있으면 버튼에 .uk-active 추가 하도록 정의</li>
+            </ul>
+        </li>
+        <li>BoardPreferController 생성후 좋아요 싫어요 요청 처리
+            <ul>
+                <li>view(get:"/board/prefer/view.do?boardNo=?[loginUser]) : 게시글 상세에서 포함되는 templates/board/boardPrefer.html 을 렌더링 하는 페이지 (ajax 호출시 내용이 변경되면 새로고침하기 위해 생성)</li>
+                <li>
+                    handler(patch:"/board/prefer/handler.do?boardNo=?"[loginUser:required=true]) : 좋아요 싫어요 버튼을 누르면 어떻게 하는지 처리하는 페이지
+                    <ul>
+                        <li>우선 유저가 좋아요 싫어요를 누른적이 있는지 확인 BoardPreferService.detail(boardNo,loginUserId)</li>
+                        <li>레코드가 없다면 누른 버튼을 등록  :BoardPreferService.register()</li>
+                        <li>레코드가 있는데 누른 버튼가 같은 것을 눌렀다면 삭제 : BoardPreferService.remove()</li>
+                        <li>레코드가 있는데 다른 버튼을 눌렸다면 누른 버튼으로 수정 : BoardPreferService.modify()</li>
+                        <li>처리가 완료되면 성공 1, 실패 0 메세지 반환 (status: 400[게시글 번호가 없거나 로그인이 안됨],405[다른 method 로 호출],500[db 서버 오류 다시 시도])</li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+        <li>templates/board/boardPrefer.html button 에 온클릭 이벤트 재정의 및  /board/detail.html 에 이벤트를 실행할 함수 정의
+            <ul>
+                <li> 좋아요 싫어요 버튼을 a태그로 만드로 "/board/prefer/handler.do?boardNo=?&preferBtn=?"이 동기식으로 통신해서 수정되는지 테스트</li>
+                <li> 좋아요 싫어요가 수정되는 것을 확인후 a 태그를 버튼으로 바꾸고 클릭 이벤트를 boardPreferHandler(boardNo,preferBtn)으로 정의 함</li>
+                <li> /board/detail.html 에 boardPreferHandler 함수를 정의 하고 fetch api 로 (put: /board/prefer/handler.do) 를 호출해서 좋아요 싫어요 수정</li>
+                <li> 수정이 완료된 것이 확인되면(state=1) fetch 로 다시 (put: /board/prefer/view.do)를 호출해 바뀐 내역을 화면에 출력</li>
+            </ul>
+        </li>
+
     </ol>
 </div>
 </html>

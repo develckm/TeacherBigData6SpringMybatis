@@ -131,6 +131,7 @@ public class UserController {
             if(redirectUri==null){
                 return "redirect:/";
             }
+            session.removeAttribute("redirectUri");
             return "redirect:"+redirectUri;
         }
     }

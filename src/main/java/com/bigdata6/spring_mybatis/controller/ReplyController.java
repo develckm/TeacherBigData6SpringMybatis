@@ -1,5 +1,6 @@
 package com.bigdata6.spring_mybatis.controller;
 
+import com.bigdata6.spring_mybatis.dto.AjaxStateHandler;
 import com.bigdata6.spring_mybatis.dto.PagingDto;
 import com.bigdata6.spring_mybatis.dto.ReplyDto;
 import com.bigdata6.spring_mybatis.dto.UserDto;
@@ -43,29 +44,29 @@ public class ReplyController {
         model.addAttribute("paging",paging);
         return "/reply/list";
     }
-    @Data
-    class AjaxSateHandler{
-        private int state=0; //0:실패 1:성공  (statusCode : 400(badRequest),500(db 통신 오류), 405(Method 오류))
-    }
+//    @Data
+//    class AjaxSateHandler{
+//        private int state=0; //0:실패 1:성공  (statusCode : 400(badRequest),500(db 통신 오류), 405(Method 오류))
+//    }
     //pathVariable + (delete,patch,put,post,get)
     @DeleteMapping ("/delete.do")
-    public @ResponseBody AjaxSateHandler delete(int replyNo,
-                                                @SessionAttribute UserDto loginUser){
-        AjaxSateHandler ajaxSateHandler=new AjaxSateHandler();
+    public @ResponseBody AjaxStateHandler delete(int replyNo,
+                                                 @SessionAttribute UserDto loginUser){
+        AjaxStateHandler ajaxStateHandler=new AjaxStateHandler();
         ReplyDto reply=replyService.detail(replyNo);
         int remove=replyService.removeOne(replyNo);
-        ajaxSateHandler.setState(remove);
+        ajaxStateHandler.setState(remove);
         if(remove>0 && reply.getImgPath()!=null){
             File originImgFile=new File(imgPath+"/"+reply.getImgPath());
             boolean del=originImgFile.delete();
             log.info("원본 이미지 삭제: ",del);
         }
 
-        return  ajaxSateHandler;
+        return  ajaxStateHandler;
     }
 
     @PostMapping("/register.do")
-    public @ResponseBody AjaxSateHandler register(ReplyDto reply,
+    public @ResponseBody AjaxStateHandler register(ReplyDto reply,
                                                   @SessionAttribute UserDto loginUser,
                                                   MultipartFile imgFile){ //임시 저장된 파일(blob) 온다
         //MultipartFile input type=file name=imgFile 있으면 무조건 null 이 아니다.
@@ -84,11 +85,11 @@ public class ReplyController {
             }
         }
 
-        AjaxSateHandler ajaxSateHandler=new AjaxSateHandler();
+        AjaxStateHandler ajaxStateHandler=new AjaxStateHandler();
         int register=0;
         register=replyService.registerOne(reply);
-        ajaxSateHandler.setState(register);
-        return ajaxSateHandler;
+        ajaxStateHandler.setState(register);
+        return ajaxStateHandler;
         //return "{\"state\":"+register+"}";
     }
     @GetMapping("/modify.do")
@@ -100,12 +101,12 @@ public class ReplyController {
         return "/reply/modify";
     }
     @PutMapping("/modify.do")
-    public @ResponseBody AjaxSateHandler modify(
+    public @ResponseBody AjaxStateHandler modify(
             ReplyDto reply,
             @SessionAttribute UserDto loginUser,
             @RequestParam(required = false, name = "imgFile") MultipartFile imgFile
     ){
-        AjaxSateHandler ajaxSateHandler=new AjaxSateHandler();
+        AjaxStateHandler ajaxStateHandler=new AjaxStateHandler();
         String originImgPath=reply.getImgPath();  //없으면 null or ""
         if(imgFile!=null&&!imgFile.isEmpty()){
             String[]contentsTypes=imgFile.getContentType().split("/");
@@ -126,7 +127,7 @@ public class ReplyController {
             boolean del=originImgFile.delete();
             log.info("원본 이미지 삭제: ",del);
         }
-        ajaxSateHandler.setState(modify);
-        return  ajaxSateHandler;
+        ajaxStateHandler.setState(modify);
+        return  ajaxStateHandler;
     }
 }

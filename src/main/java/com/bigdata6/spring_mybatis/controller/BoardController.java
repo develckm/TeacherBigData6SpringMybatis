@@ -2,6 +2,7 @@ package com.bigdata6.spring_mybatis.controller;
 
 import com.bigdata6.spring_mybatis.ImgFileUploadUtil;
 import com.bigdata6.spring_mybatis.dto.*;
+import com.bigdata6.spring_mybatis.service.BoardPreferService;
 import com.bigdata6.spring_mybatis.service.BoardService;
 import com.bigdata6.spring_mybatis.service.ReplyService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +24,14 @@ import java.util.List;
 public class BoardController {
     private BoardService boardService;
     private ReplyService replyService;
+    private BoardPreferService boardPreferService;
     private Logger log= LoggerFactory.getLogger(this.getClass().getSimpleName());
     @Value("${img.upload.path}")
     private String imgPath;
-    public BoardController(BoardService boardService,ReplyService replyService) {
+    public BoardController(BoardService boardService,ReplyService replyService,BoardPreferService boardPreferService) {
         this.boardService = boardService;
         this.replyService = replyService;
+        this.boardPreferService=boardPreferService;
     }
 
     @GetMapping("/list.do")
@@ -46,15 +49,21 @@ public class BoardController {
         return "/board/list";
     }
     @GetMapping("/{boardNo}/detail.do")
-    public String detail(@PathVariable int boardNo,
-                         PagingDto paging,
-                         HttpServletRequest req,
-                         Model model){
+    public String detail(
+            @PathVariable int boardNo,
+            PagingDto paging,
+            HttpServletRequest req,
+            Model model,
+            @SessionAttribute(required = false) UserDto loginUser){
         //pathVariable : 파라미터가 쿼리스트링으로 오는 것이 보기 좋지 않고 명시적이지 않아서 등장
         //pathVariable : required=true 를 무조건 갖는다.
         paging.setQueryString(req.getParameterMap());
         BoardDto board=boardService.detail(boardNo);
         List<ReplyDto> replyList=replyService.boardDetailList(boardNo,paging);
+        if(loginUser!=null){ //로그인한 유저가 해당 게시글에 좋아요 싫어요를 했는지 확인
+            BoardPreferDto loginUserPrefer=boardPreferService.detail(boardNo,loginUser.getUser_id());
+            board.getBoardPreferView().setLoginUserPrefer(loginUserPrefer);
+        }
         model.addAttribute("board",board);
         model.addAttribute("replyList",replyList);
         model.addAttribute("paging",paging);

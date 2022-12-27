@@ -35,7 +35,8 @@
     </div>
     <div class="uk-margin">
         <label class="uk-form-label" for="boardTitle">좋아요 : </label>
-        <th:block th:include="/board/boardPrefer" th:with="prefer=${board.boardPreferView}"></th:block>
+        <span id="boardPreferContainer"
+             th:include="/board/boardPrefer" th:with="prefer=${board.boardPreferView}"></span>
     </div>
 
     <div class="uk-margin">
@@ -191,7 +192,35 @@ async function modifyReply(formNode){
         alert("서버 오류 ("+resp.status+")");
     }
 }
+async function boardPreferHandler(boardNo,preferBtn){
+    let url=`/board/prefer/handler.do?boardNo=${boardNo}&preferBtn=${preferBtn}`;
+    let viewUrl="/board/prefer/view.do?boardNo="+boardNo;
+    const boardPreferContainer=document.getElementById("boardPreferContainer");
+    const resp=await fetch(url,{method:"PUT"});
+    if(resp.status==200){
+        const json=await resp.json();
+        if (json.state==1){
+            const resp=await fetch(viewUrl);
+            if(resp.status==200){
+                let html=await resp.text();
+                boardPreferContainer.innerHTML=html;
+            }else{
+                alert("좋아요 싫어요 불러오기 실패(새로고침하세요)");
+            }
+        }else {
+            alert("좋아요 싫어요 실패");
+        }
+    }else if(resp.status==400){
+        alert("로그인 하셔야 이용할 수 있습니다.");
+    }else if(resp.status==405){
+        alert("잘못된 경로로 이용하시고 계십니다.");
+    }else if(resp.status==500){
+        alert("db 서버 오류");
+    }
 
+
+
+}
 </script>
 
 </div>

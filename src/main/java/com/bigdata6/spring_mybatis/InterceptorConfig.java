@@ -22,6 +22,8 @@ public class InterceptorConfig implements WebMvcConfigurer {
                 .addPathPatterns("/board/*.do")
                 .addPathPatterns("/board/*/*.do")
                 .excludePathPatterns("/board/list.do")
-                .excludePathPatterns("/board/*/detail.do");
+                .excludePathPatterns("/board/*/detail.do")
+                .excludePathPatterns("/board/prefer/*.do");
+
     }
 }
