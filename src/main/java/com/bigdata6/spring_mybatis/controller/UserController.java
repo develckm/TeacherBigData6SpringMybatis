@@ -115,14 +115,21 @@ public class UserController {
         }
     }
     @GetMapping("/login.do")
-    public void login(){}
+    public void login(HttpServletRequest req,
+                      HttpSession session,
+                      @SessionAttribute(required = false) String redirectUri){
+        String referer=req.getHeader("referer");
+        if (redirectUri==null&&!(referer.equals("http://localhost:8888/") || referer.equals("http://localhost:8888/user/login.do"))){
+            session.setAttribute("redirectUri",referer);
+        }
+
+    }
     @PostMapping("/login.do")
     public String login(
             @RequestParam(name = "user_id") String userId,
             String pw,
             HttpSession session,
-            @SessionAttribute(required = false) String redirectUri
-            ){
+            @SessionAttribute(required = false) String redirectUri){
         UserDto user=userService.login(userId,pw);
         session.setAttribute("loginUser",user);
         if(user==null){

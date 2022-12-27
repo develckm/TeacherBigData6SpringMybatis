@@ -17,6 +17,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
         HttpSession session=request.getSession();
         Object loginUser_obj=session.getAttribute("loginUser");
         String url=request.getRequestURI();
+        String querString=request.getQueryString();
+        url+=(querString!=null)?"?"+querString:"";
         log.info("preHandle(url):"+url);
         if(loginUser_obj==null){
             session.setAttribute("msg","로그인 후 이용가능 한 서비스 입니다.");

@@ -96,7 +96,9 @@
                 <li> 수정이 완료된 것이 확인되면(state=1) fetch 로 다시 (put: /board/prefer/view.do)를 호출해 바뀐 내역을 화면에 출력</li>
             </ul>
         </li>
-
+        <li>InterceptorConfig 에서  loginCheckInterceptor 의 ("/board/prefer/*.do") 요청 제외 : ajax 요청시 로그인 페이지로 갈 수 없기 때문 (400에러 처리해서 괜찮음)</li>
+        <li>loginCheckInterceptor 에서 로그인 페이지로 가기전 페이지의 url 을 session.redirectUrl 로 저장했었는데 파라미터가 빠져있어서 추가함</li>
+        <li>(get: /user/login.do)로그인폼 요청시 폼 요청 이전 페이지로 이동하기 위해서 session.redirectUrl 에 이전 페이지 url 추가 (request.getHeader("referer"))</li>
     </ol>
 </div>
 </html>
