@@ -53,5 +53,17 @@
         </div>
     </nav>
 </div>
-
+<div id="loginModal" uk-modal>
+    <div class="uk-modal-dialog uk-modal-body">
+        <h4  th:if="${session.msg!=null}" class="uk-text-center" th:text="${session.msg}"></h4>
+        <p class="uk-text-right">
+            <button class="uk-button uk-button-default uk-modal-close" type="button">Cancel</button>
+        </p>
+    </div>
+</div>
+<th:block th:if="${session.msg!=null}" >
+    <script th:inline="javascript">
+        UIkit.modal(loginModal).show();
+    </script>
+</th:block>
 </html>

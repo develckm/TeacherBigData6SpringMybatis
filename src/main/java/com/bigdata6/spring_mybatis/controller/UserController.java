@@ -133,6 +133,7 @@ public class UserController {
         UserDto user=userService.login(userId,pw);
         session.setAttribute("loginUser",user);
         if(user==null){
+            session.setAttribute("msg","아이디나 비밀번호를 확인하세요!");
             return "redirect:/user/login.do";
         }else{
             if(redirectUri==null){
